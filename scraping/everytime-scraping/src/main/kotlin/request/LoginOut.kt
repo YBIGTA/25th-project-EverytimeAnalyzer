@@ -19,7 +19,9 @@ object LoginOutSelector {
 class LoginOut(
     private val driver: WebDriver,
     private val timeout: Long,
-    private val sleepTime: Int
+    private val sleepTime: Int,
+    private val everytimeId: String,
+    private val everytimePassword: String,
 ) {
     private val EVERY_TIME_LOGIN_URL: String = "https://account.everytime.kr/login"
     private val MAIN_PAGE: String = "https://everytime.kr/"
@@ -30,11 +32,11 @@ class LoginOut(
 
         WebDriverWait(driver, Duration.ofSeconds(timeout))
             .until(ExpectedConditions.elementToBeClickable(By.cssSelector(LoginOutSelector.idInput)))
-            .sendKeys("ticktacktok135")
+            .sendKeys(everytimeId)
 
         WebDriverWait(driver, Duration.ofSeconds(timeout))
             .until(ExpectedConditions.elementToBeClickable(By.cssSelector(LoginOutSelector.pwInput)))
-            .sendKeys("park6240")
+            .sendKeys(everytimePassword)
 
         sleep(sleepTime)
 

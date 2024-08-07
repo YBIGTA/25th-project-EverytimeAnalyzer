@@ -16,9 +16,9 @@ class EverytimeParser(
     private val timeout: Int,
     private val urlPrefix: String,
     private val sleepTime: Int,
-    private val mongoRepository: MongoRepository<EverytimeArticle>
+    private val mongoRepository: MongoRepository<EverytimeArticle>,
+    private val loginOut: LoginOut
 ) {
-    private val loginOut: LoginOut = LoginOut(driver, timeout.toLong(), 5)
     private val articleListRequest: ArticleListRequest = ArticleListRequest(driver, urlPrefix, timeout.toLong())
     private val articleRequest: ArticleRequest = ArticleRequest(driver, timeout.toLong())
     private val logger: Logger = LoggerFactory.getLogger(EverytimeParser::class.java)
