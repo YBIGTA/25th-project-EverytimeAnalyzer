@@ -1,13 +1,8 @@
 package org.example
 
 import org.example.entity.LectureReview
-import org.example.parser.LectureListParser
-import org.example.parser.LectureReviewPageParser
 import org.example.repo.MongoRepository
-import org.example.request.LectureBoardRequest
 import org.example.request.LoginOut
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.remote.RemoteWebDriver
@@ -36,35 +31,21 @@ fun main(args: Array<String>) {
     // create remote web driver
     val driver: WebDriver = RemoteWebDriver(URL(remoteDriverUrl), ChromeOptions())
 
-    val timeout: Int = 7
+    val timeout: Long = 7
     val sleepTime: Int = 3
     val loginOut = LoginOut(driver, timeout.toLong(), sleepTime, everytimeId, everytimePassword)
-    val lectureBoardRequest = LectureBoardRequest(driver, timeout.toLong(), sleepTime)
 
-    // login
-    loginOut.loginPage()
-    sleep(sleepTime)
+    val lectureReviewScraper: LectureReviewScraper = LectureReviewScraper(
+        driver,
+        sleepTime,
+        timeout,
+        mongoRepository,
+        loginOut
+    )
 
-    // 에브리타임 강의 목록 스크래핑
-    val lectureListPage: Document = lectureBoardRequest.lectureListPageRequest(args.majorNth, args.detailedMajorNth)
+    lectureReviewScraper.login()
+    lectureReviewScraper.scrape(args.majorNth, args.detailedMajorNth)
+    lectureReviewScraper.logout()
 
-    // 개별 강의후기 페이지 url과 과목코드 추출
-    val reviewPageUrls: List<String> = LectureListParser.parseUrl(lectureListPage)
-    val subjectCodes: List<String> = LectureListParser.parseLectureCode(lectureListPage)
-    assert(reviewPageUrls == subjectCodes)
-
-    // 개별 강의후기 페이지 스크래핑
-    for (i in reviewPageUrls.indices) {
-        driver.get("https://everytime.kr${reviewPageUrls[i]}?tab=article")
-        sleep(sleepTime)
-        val doc: Document = Jsoup.parse(driver.pageSource)
-        val parse = LectureReviewPageParser.parse(subjectCodes[i], doc)
-        parse.forEach { mongoRepository.insert(it, "inserting review id=${it.id}, subject_code=${it.lectureCode}") }
-    }
-
-
-    // logout
-    loginOut.logoutPage()
-    // need to close session (REQUIRED!!)
     driver.quit()
 }
