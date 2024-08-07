@@ -1,5 +1,6 @@
 package org.example
 
+import org.example.entity.EverytimeArticle
 import org.example.repo.MongoRepository
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeOptions
@@ -10,14 +11,13 @@ fun main(args: Array<String>) {
     // parse args
     val args: Args = parseArgs(args)
 
-    val mongoUrl: String = "mongodb://mongo:27017"
+    val mongoUrl: String = "mongodb://mongo_db:27017"
     val remoteDriverUrl: String = "http://selenium:4444"
     // prepare connection
     // val mongoUrl: String = "mongodb://localhost:27017"
-    val mongoRepository: MongoRepository = MongoRepository(mongoUrl)
+    val mongoRepository: MongoRepository<EverytimeArticle> = MongoRepository.of<EverytimeArticle>(mongoUrl, "article")
 
     // create remote web driver
-    // val remoteDriverUrl: String = "http://127.0.0.1:4444"
     val driver: WebDriver = RemoteWebDriver(URL(remoteDriverUrl), ChromeOptions())
 
     // create driver

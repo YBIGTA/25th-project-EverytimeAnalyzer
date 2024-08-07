@@ -1,5 +1,6 @@
 package org.example
 
+import org.example.entity.EverytimeArticle
 import org.example.parser.ArticlePageParser
 import org.example.repo.MongoRepository
 import org.example.request.ArticleListRequest
@@ -15,7 +16,7 @@ class EverytimeParser(
     private val timeout: Int,
     private val urlPrefix: String,
     private val sleepTime: Int,
-    private val mongoRepository: MongoRepository
+    private val mongoRepository: MongoRepository<EverytimeArticle>
 ) {
     private val loginOut: LoginOut = LoginOut(driver, timeout.toLong(), 5)
     private val articleListRequest: ArticleListRequest = ArticleListRequest(driver, urlPrefix, timeout.toLong())
@@ -54,7 +55,7 @@ class EverytimeParser(
 
             try {
                 val parsedArticle = ArticlePageParser.parseArticle(request)
-                mongoRepository.insertArticle(parsedArticle)
+                mongoRepository.insert(parsedArticle, "inserting article id=${parsedArticle.articleId}")
             } catch (e: NullPointerException) {
                 logger.warn("parsing error when parsing:{}", articleUrl)
             }
