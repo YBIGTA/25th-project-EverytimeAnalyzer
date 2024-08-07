@@ -21,6 +21,9 @@ services:
 
   scraping:
     build: .
+  mongo-client:
+    container_name: gitp-client
+    image: "mongo-client:latest"
 #    networks:
 #      - foo_network
 
