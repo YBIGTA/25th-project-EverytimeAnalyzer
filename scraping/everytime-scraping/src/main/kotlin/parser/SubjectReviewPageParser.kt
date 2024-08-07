@@ -1,5 +1,6 @@
 package org.example.parser
 
+import org.bson.types.ObjectId
 import org.example.entity.SubjectReview
 import org.jsoup.nodes.Document
 
@@ -30,7 +31,7 @@ object SubjectReviewPageParser {
                 // val rawStars: String = it.select(ReviewDivCssSelector.stars).attr("style")
 
                 val (year, semester) = extractYearAndSemester(rawSemester)
-                SubjectReview(code, year, semester, text)
+                SubjectReview(ObjectId(), code, year, semester, text)
             }
     }
 }
