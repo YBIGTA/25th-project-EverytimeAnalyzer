@@ -1,7 +1,9 @@
 package org.example
 
+import org.example.parser.SubjectListParser
 import org.example.request.LoginOut
 import org.example.request.SubjectBoardRequest
+import org.jsoup.nodes.Document
 import org.openqa.selenium.chrome.ChromeDriver
 
 fun mySleep(sleepTime: Int) {
@@ -20,7 +22,9 @@ fun main() {
     // parse
     loginOut.loginPage()
     mySleep(sleepTime)
-    subjectBoardRequest.requestSubjectListPage(2, 1)
+    val page: Document = subjectBoardRequest.requestSubjectListPage(2, 1)
+    val parseUrl: List<String> = SubjectListParser.parseUrl(page)
+    parseUrl.forEach { println(it) }
     loginOut.logoutPage()
 
 }
