@@ -9,7 +9,7 @@ import java.net.URL
 
 fun main(args: Array<String>) {
     // parse args
-    val args: Args = parseArgs(args)
+    val args: Args = articleArgParser(args)
 
     val mongoUrl: String = "mongodb://mongo_db:27017"
     val remoteDriverUrl: String = "http://selenium:4444"

@@ -7,6 +7,12 @@ data class Args(
     val sleepTime: Int
 )
 
+data class ReviewArgs(
+    val majorNth: Int,
+    val detailedMajorNth: Int,
+    val sleepTime: Int,
+)
+
 fun isNumeric(toCheck: String): Boolean {
     return toCheck.toIntOrNull() != null
 }
@@ -20,7 +26,7 @@ fun validateCondition(condition: Boolean) {
  * --url_prefix 385546 --start_page 10 --page_num 5 --sleep_time 4
  */
 // TODO: add validation logic for --
-fun parseArgs(args: Array<String>): Args {
+fun articleArgParser(args: Array<String>): Args {
     // validate
     validateCondition(args.size == 8)
     validateCondition(args[0] == "--url_prefix")
@@ -39,4 +45,24 @@ fun parseArgs(args: Array<String>): Args {
         args[7].toInt(),
     )
     return args
+}
+
+fun reviewArgParser(args: Array<String>): ReviewArgs {
+    // validate
+    validateCondition(args.size == 6)
+    validateCondition(args[0] == "--major_nth")
+    validateCondition(args[2] == "--detailed_major_nth")
+    validateCondition(args[4] == "--sleep_time")
+    validateCondition(isNumeric(args[1]))
+    validateCondition(isNumeric(args[3]))
+    validateCondition(isNumeric(args[5]))
+
+    // parse
+    val args: ReviewArgs = ReviewArgs(
+        args[1].toInt(),
+        args[3].toInt(),
+        args[5].toInt()
+    )
+    return args
+
 }
