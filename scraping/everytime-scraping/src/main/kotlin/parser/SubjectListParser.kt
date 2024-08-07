@@ -4,6 +4,7 @@ import org.jsoup.nodes.Document
 
 object SubjectListCssSelector {
     val url: String = "#subjects > div.list > table > tbody > tr > td > a"
+    val subjectCode: String = "#subjects > div.list > table > tbody > tr > td:nth-child(3)"
 }
 
 object SubjectListParser {
@@ -15,5 +16,12 @@ object SubjectListParser {
             .map { it.attr("href") }
 
         return reviewUrlList
+    }
+
+    fun parseSubjectCode(doc: Document): List<String> {
+        val subjectCodeList: List<String> = doc.select(SubjectListCssSelector.subjectCode)
+            .map { it.text() }
+
+        return subjectCodeList
     }
 }
