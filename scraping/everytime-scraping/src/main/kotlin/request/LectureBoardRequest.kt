@@ -11,9 +11,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.Duration
 
-object SubjectBoardCssSelector {
-    val subjectListOpenBtn: String = "#container > ul > li.button.search"
-    val subjectListTable: String = "#subjects > div.list > table > tbody"
+object LectureBoardCssSelector {
+    val lectureListOpenBtn: String = "#container > ul > li.button.search"
+    val lectureListTable: String = "#subjects > div.list > table > tbody"
     val majorSelectBtn: String = "#subjects > div.filter > a:nth-child(4)"
 }
 
@@ -23,12 +23,12 @@ object MajorSelectPageCssSelector {
     fun detailMajorBtn(nth: Int): String = "#subjectCategoryFilter > div > ul > ul.unfolded > ul.unfolded > li:nth-of-type(${nth})"
 }
 
-class SubjectBoardRequest(
+class LectureBoardRequest(
     private val driver: WebDriver,
     private val timeout: Long,
     private val sleepTime: Int
 ) {
-    private val subjectBoardPageUrl: String = "https://everytime.kr/timetable"
+    private val lectureBoardPageUrl: String = "https://everytime.kr/timetable"
     private val logger: Logger = LoggerFactory.getLogger(LoginOut::class.java)
 
     fun clickBtn(selector: String) = WebDriverWait(driver, Duration.ofSeconds(timeout))
@@ -43,7 +43,7 @@ class SubjectBoardRequest(
     fun selectMajor(majorNth: Int, detailMajorNth: Int) {
         // "전공-영역" 버튼 클릭
         sleep(sleepTime)
-        clickBtn(SubjectBoardCssSelector.majorSelectBtn)
+        clickBtn(LectureBoardCssSelector.majorSelectBtn)
         logger.info("opening subjectList major-select-popup-success")
         // 전공선택 팝업에서 "신촌" 버튼 클릭
         sleep(sleepTime)
@@ -59,14 +59,14 @@ class SubjectBoardRequest(
         logger.info("clicked deatailMajorBtn")
     }
 
-    fun requestSubjectListPage(majorNth: Int, detailMajorNth: Int): Document {
+    fun lectureListPageRequest(majorNth: Int, detailMajorNth: Int): Document {
         // 시간표 페이지로 이동
-        driver.get(subjectBoardPageUrl)
+        driver.get(lectureBoardPageUrl)
 
         // "수강신청 목록에서 검색"버튼 클릭
         sleep(sleepTime)
         WebDriverWait(driver, Duration.ofSeconds(timeout))
-            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(SubjectBoardCssSelector.subjectListOpenBtn)))
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(LectureBoardCssSelector.lectureListOpenBtn)))
             .click()
         logger.info("opening subjectList success")
 
@@ -75,7 +75,7 @@ class SubjectBoardRequest(
         // 강의 table 불러올때까지 기달리기
         sleep(sleepTime)
         WebDriverWait(driver, Duration.ofSeconds(timeout))
-            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(SubjectBoardCssSelector.subjectListTable)))
+            .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(LectureBoardCssSelector.lectureListTable)))
 
 
         val pageSource: String = driver.pageSource

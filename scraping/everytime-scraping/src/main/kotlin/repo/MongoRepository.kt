@@ -40,7 +40,7 @@ class MongoRepository<T : Any>(
     fun insert(article: T, insertLog: String) {
         val database: MongoDatabase = client.getDatabase(databaseName)
         val collection: MongoCollection<T> = database.getCollection(collectionName, clazz)
-        logger.info(insertLog)
+        logger.trace(insertLog)
         collection.insertOne(article)
     }
 

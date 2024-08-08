@@ -21,6 +21,11 @@ services:
 
   scraping:
     build: .
+    environment:
+      - EVERY_TIME_ID=ticktacktok135
+      - EVERY_TIME_PASSWORD=park6240
+      - MONGO_URL=mongodb://mongo_db:27017
+      - REMOTE_DRIVER_URL=http://selenium:4444
   mongo-client:
     container_name: gitp-client
     image: "mongo-client:latest"
