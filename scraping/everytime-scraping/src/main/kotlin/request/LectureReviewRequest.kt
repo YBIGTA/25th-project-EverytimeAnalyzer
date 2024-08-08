@@ -15,7 +15,6 @@ class LectureReviewRequest(
     fun request(urlPrefix: String): Document {
         driver.get("https://everytime.kr${urlPrefix}?tab=article")
         sleep(1)
-        logger.info("requested ${urlPrefix}")
         return Jsoup.parse(driver.pageSource)
     }
 

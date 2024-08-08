@@ -49,9 +49,10 @@ class LectureReviewScraper(
             val parsedReviewPage = lectureReviewRequest.request(reviewPageUrls[i])
 
             val reviews: List<LectureReview> = LectureReviewPageParser.parse(lectureCodes[i], parsedReviewPage)
+            logger.info("[${i}/${reviewPageUrls.size}] requested ${reviewPageUrls[i]}")
 
             reviews.forEach { mongoRepository.insert(it, "inserting review id=${it.id}, subject_code=${it.lectureCode}") }
-            logger.info("inserted subject-code:${lectureCodes[i]} ${reviews.size} ")
+            logger.info("inserted reviews to db subject-code:${lectureCodes[i]} insert_count:${reviews.size} ")
         }
     }
 }
