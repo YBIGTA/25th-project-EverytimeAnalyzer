@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
     val driver: WebDriver = RemoteWebDriver(URL(remoteDriverUrl), ChromeOptions())
 
     val timeout: Long = 7
-    val sleepTime: Int = 3
+    val sleepTime: Int = args.sleepTime
     val loginOut = LoginOut(driver, timeout.toLong(), sleepTime, everytimeId, everytimePassword)
 
     val lectureReviewScraper: LectureReviewScraper = LectureReviewScraper(
