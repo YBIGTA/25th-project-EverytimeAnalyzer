@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 class ArgParseKtTest {
     @Test
     fun sample_test() {
-        val arr: Array<String> = arrayOf("--major_nth", "2", "--detailed_major_nth", "3", "--sleep_time", "5")
+        val arr: Array<String> = arrayOf("-m", "2", "-dm", "3", "-st", "5")
         val reviewArgParser: ReviewArgs = reviewArgParser(arr)
         println(reviewArgParser)
     }

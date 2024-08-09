@@ -1,6 +1,7 @@
 package org.example
 
-import org.example.entity.LectureReview
+import org.bson.types.ObjectId
+import org.example.entity.LectureReviewWithMetaData
 import org.example.parser.LectureListParser
 import org.example.parser.LectureReviewPageParser
 import org.example.repo.MongoRepository
@@ -13,10 +14,10 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class LectureReviewScraper(
-    private val driver: WebDriver,
+    driver: WebDriver,
     private val sleepTime: Int,
     timeout: Long,
-    private val mongoRepository: MongoRepository<LectureReview>,
+    private val mongoRepository: MongoRepository<LectureReviewWithMetaData>,
     private val loginOut: LoginOut
 ) {
     private val logger: Logger = LoggerFactory.getLogger(LectureReviewScraper::class.java)
@@ -47,12 +48,15 @@ class LectureReviewScraper(
         for (i in reviewPageUrls.indices) {
             sleep(sleepTime)
             val parsedReviewPage = lectureReviewRequest.request(reviewPageUrls[i])
+            logger.info("[${i + 1}/${reviewPageUrls.size}] requested ${reviewPageUrls[i]}")
 
-            val reviews: List<LectureReview> = LectureReviewPageParser.parse(lectureCodes[i], parsedReviewPage)
-            logger.info("[${i}/${reviewPageUrls.size}] requested ${reviewPageUrls[i]}")
+            val reviewWithMetaDataList = LectureReviewPageParser
+                .parse(lectureCodes[i], parsedReviewPage)
+                .map { LectureReviewWithMetaData(ObjectId(), lectureCodes[i], majorNth, detailedMajorNth, it) }
 
-            reviews.forEach { mongoRepository.insert(it, "inserting review id=${it.id}, subject_code=${it.lectureCode}") }
-            logger.info("inserted reviews to db subject-code:${lectureCodes[i]} insert_count:${reviews.size} ")
+            reviewWithMetaDataList.forEach { mongoRepository.insert(it, "inserting review id=${it.id}, subject_code=${it.lectureCode}") }
+
+            logger.info("inserted reviews to db subject-code:${lectureCodes[i]} insert_count:${reviewWithMetaDataList.size} ")
         }
     }
 }

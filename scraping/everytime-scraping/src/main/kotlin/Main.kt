@@ -1,6 +1,6 @@
 package org.example
 
-import org.example.entity.LectureReview
+import org.example.entity.LectureReviewWithMetaData
 import org.example.repo.MongoRepository
 import org.example.request.LoginOut
 import org.openqa.selenium.WebDriver
@@ -26,7 +26,7 @@ fun main(args: Array<String>) {
 
 
     // prepare connection
-    val mongoRepository: MongoRepository<LectureReview> = MongoRepository.of<LectureReview>(mongoUrl, "reviews")
+    val mongoRepository: MongoRepository<LectureReviewWithMetaData> = MongoRepository.of<LectureReviewWithMetaData>(mongoUrl, "reviews")
 
     // create remote web driver
     val driver: WebDriver = RemoteWebDriver(URL(remoteDriverUrl), ChromeOptions())

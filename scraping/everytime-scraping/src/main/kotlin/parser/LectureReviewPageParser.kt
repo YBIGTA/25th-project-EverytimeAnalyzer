@@ -32,7 +32,7 @@ object LectureReviewPageParser {
                 // val rawStars: String = it.select(ReviewDivCssSelector.stars).attr("style")
 
                 val (year, semester) = extractYearAndSemester(rawSemester)
-                LectureReview(ObjectId(), lectureCode, year, semester, text)
+                LectureReview(year, semester, text)
             }
     }
 }
