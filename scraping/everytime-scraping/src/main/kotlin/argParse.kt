@@ -50,9 +50,9 @@ fun articleArgParser(args: Array<String>): Args {
 fun reviewArgParser(args: Array<String>): ReviewArgs {
     // validate
     validateCondition(args.size == 6)
-    validateCondition(args[0] == "--major_nth")
-    validateCondition(args[2] == "--detailed_major_nth")
-    validateCondition(args[4] == "--sleep_time")
+    validateCondition(args[0] == "-m")
+    validateCondition(args[2] == "-dm")
+    validateCondition(args[4] == "-st")
     validateCondition(isNumeric(args[1]))
     validateCondition(isNumeric(args[3]))
     validateCondition(isNumeric(args[5]))
