@@ -22,7 +22,7 @@ class LectureReviewScraper(
 ) {
     private val logger: Logger = LoggerFactory.getLogger(LectureReviewScraper::class.java)
     private val lectureBoardRequest = LectureBoardRequest(driver, timeout, sleepTime)
-    private val lectureReviewRequest = LectureReviewRequest(driver)
+    private val lectureReviewRequest = LectureReviewRequest(driver, timeout, sleepTime)
 
     fun login() {
         loginOut.loginPage()
