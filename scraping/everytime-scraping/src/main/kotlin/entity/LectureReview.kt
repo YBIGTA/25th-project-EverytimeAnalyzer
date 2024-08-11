@@ -7,7 +7,7 @@ data class LectureReview(
     val year: Int,
     val semester: String,
     val content: String,
-    // val rate: Int,
+    val rate: Int,
     // val likes: Int
 )
 
