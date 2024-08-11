@@ -24,7 +24,6 @@ fun main(args: Array<String>) {
     val everytimePassword: String = System.getenv("EVERY_TIME_PASSWORD")
         ?: throw IllegalStateException("environment variable EVERY_TIME_PASSWORD is not set in system")
 
-
     // prepare connection
     val mongoRepository: MongoRepository<LectureReviewWithMetaData> = MongoRepository.of<LectureReviewWithMetaData>(mongoUrl, "reviews")
 
@@ -44,7 +43,9 @@ fun main(args: Array<String>) {
     )
 
     lectureReviewScraper.login()
-    lectureReviewScraper.scrape(args.majorNth, args.detailedMajorNth)
+    for (i in args.detailedMajorNthList.indices){
+        lectureReviewScraper.scrape(args.majorNth, args.detailedMajorNthList[i])
+    }
     lectureReviewScraper.logout()
 
     driver.quit()

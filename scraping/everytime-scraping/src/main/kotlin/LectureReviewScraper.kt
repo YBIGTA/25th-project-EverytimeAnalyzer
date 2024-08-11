@@ -39,7 +39,7 @@ class LectureReviewScraper(
     fun scrape(majorNth: Int, detailedMajorNth: Int) {
         val lectureListPage: Document = lectureBoardRequest.request(majorNth, detailedMajorNth)
 
-        logger.info("requesting lecture ")
+        logger.info("requesting lecture majorNth: ${majorNth}, detailedMajorNth:${detailedMajorNth}")
 
         val reviewPageUrls: List<String> = LectureListParser.parseUrl(lectureListPage)
         val lectureCodes: List<String> = LectureListParser.parseLectureCode(lectureListPage)

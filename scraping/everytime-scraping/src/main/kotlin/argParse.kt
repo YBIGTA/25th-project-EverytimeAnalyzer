@@ -8,9 +8,9 @@ data class Args(
 )
 
 data class ReviewArgs(
-    val majorNth: Int,
-    val detailedMajorNth: Int,
     val sleepTime: Int,
+    val majorNth: Int,
+    val detailedMajorNthList: List<Int>,
 )
 
 fun isNumeric(toCheck: String): Boolean {
@@ -18,7 +18,7 @@ fun isNumeric(toCheck: String): Boolean {
 }
 
 fun validateCondition(condition: Boolean) {
-    if (!condition) throw Exception("error")
+    if (!condition) throw Exception("argument parse error")
 }
 
 /**
@@ -47,22 +47,23 @@ fun articleArgParser(args: Array<String>): Args {
     return args
 }
 
+/**
+ * expect args like -st 5 -m 2 -dm 1 3 5 7
+ * dm(세부 학과: ex 경제학과, 문화와 예술 등등), m(학과: 교양과목, 이과대학, 상경대학) is expected single digit
+ */
 fun reviewArgParser(args: Array<String>): ReviewArgs {
-    // validate
-    validateCondition(args.size == 6)
-    validateCondition(args[0] == "-m")
-    validateCondition(args[2] == "-dm")
-    validateCondition(args[4] == "-st")
-    validateCondition(isNumeric(args[1]))
-    validateCondition(isNumeric(args[3]))
-    validateCondition(isNumeric(args[5]))
+    validateCondition(6 <= args.size)
+    validateCondition(args[0] == "-st")
+    validateCondition(args[2] == "-m")
+    validateCondition(args[4] == "-dm")
+
+    args.filterIndexed { idx, _ -> idx !in arrayOf(0, 2, 4) }
+        .forEach { validateCondition(isNumeric(it)) }
 
     // parse
-    val args: ReviewArgs = ReviewArgs(
+    return ReviewArgs(
         args[1].toInt(),
         args[3].toInt(),
-        args[5].toInt()
+        args.slice(5..<args.size).map { it.toInt() }
     )
-    return args
-
 }
