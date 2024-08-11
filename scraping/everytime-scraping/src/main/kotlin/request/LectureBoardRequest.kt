@@ -5,6 +5,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.WebElement
+import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.slf4j.Logger
@@ -14,6 +16,7 @@ import java.time.Duration
 object LectureBoardCssSelector {
     val lectureListOpenBtn: String = "#container > ul > li.button.search"
     val lectureListTable: String = "#subjects > div.list > table > tbody"
+    val lectureListTr: String = "#subjects > div.list > table > tbody tr"
     val majorSelectBtn: String = "#subjects > div.filter > a:nth-child(4)"
 }
 
@@ -30,6 +33,7 @@ class LectureBoardRequest(
 ) {
     private val lectureBoardPageUrl: String = "https://everytime.kr/timetable"
     private val logger: Logger = LoggerFactory.getLogger(LoginOut::class.java)
+    private val actions: Actions = Actions(driver)
 
     fun clickBtn(selector: String) = WebDriverWait(driver, Duration.ofSeconds(timeout))
         .until(ExpectedConditions.elementToBeClickable(By.cssSelector(selector)))
@@ -59,6 +63,17 @@ class LectureBoardRequest(
         logger.info("clicked deatailMajorBtn")
     }
 
+    fun scrollDown(): Int {
+        val trList: MutableList<WebElement> = WebDriverWait(driver, Duration.ofSeconds(timeout))
+            .until(
+                ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                    By.cssSelector(LectureBoardCssSelector.lectureListTr)
+                )
+            )
+        actions.moveToElement(trList.first()).scrollToElement(trList.last()).perform()
+        return trList.size
+    }
+
     fun lectureListPageRequest(majorNth: Int, detailMajorNth: Int): Document {
         // 시간표 페이지로 이동
         driver.get(lectureBoardPageUrl)
@@ -76,6 +91,16 @@ class LectureBoardRequest(
         sleep(sleepTime)
         WebDriverWait(driver, Duration.ofSeconds(timeout))
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(LectureBoardCssSelector.lectureListTable)))
+
+        var prevTrSize: Int = 0
+        while (true) {
+            sleep(sleepTime)
+            val currentTrSize: Int = scrollDown()
+            if (prevTrSize == currentTrSize)
+                break
+            prevTrSize = currentTrSize
+        }
+        logger.info("detected {} lectures", prevTrSize)
 
 
         val pageSource: String = driver.pageSource
