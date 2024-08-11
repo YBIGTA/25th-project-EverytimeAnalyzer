@@ -30,9 +30,12 @@ class LoginOut(
     fun loginPage() {
         driver.get(EVERY_TIME_LOGIN_URL)
 
+        sleep(sleepTime)
         WebDriverWait(driver, Duration.ofSeconds(timeout))
             .until(ExpectedConditions.elementToBeClickable(By.cssSelector(LoginOutSelector.idInput)))
             .sendKeys(everytimeId)
+
+        sleep(sleepTime)
 
         WebDriverWait(driver, Duration.ofSeconds(timeout))
             .until(ExpectedConditions.elementToBeClickable(By.cssSelector(LoginOutSelector.pwInput)))
