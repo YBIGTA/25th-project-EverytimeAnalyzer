@@ -37,7 +37,7 @@ class LectureReviewScraper(
 
 
     fun scrape(majorNth: Int, detailedMajorNth: Int) {
-        val lectureListPage: Document = lectureBoardRequest.lectureListPageRequest(majorNth, detailedMajorNth)
+        val lectureListPage: Document = lectureBoardRequest.request(majorNth, detailedMajorNth)
 
         logger.info("requesting lecture ")
 

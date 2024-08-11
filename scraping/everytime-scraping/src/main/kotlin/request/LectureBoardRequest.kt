@@ -74,7 +74,7 @@ class LectureBoardRequest(
         return trList.size
     }
 
-    fun lectureListPageRequest(majorNth: Int, detailMajorNth: Int): Document {
+    fun request(majorNth: Int, detailMajorNth: Int): Document {
         // 시간표 페이지로 이동
         driver.get(lectureBoardPageUrl)
 
