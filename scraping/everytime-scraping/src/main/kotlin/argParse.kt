@@ -9,6 +9,7 @@ data class Args(
 
 data class ReviewArgs(
     val sleepTime: Int,
+    val scrollLimit: Int,
     val majorNth: Int,
     val detailedMajorNthList: List<Int>,
 )
@@ -48,22 +49,24 @@ fun articleArgParser(args: Array<String>): Args {
 }
 
 /**
- * expect args like -st 5 -m 2 -dm 1 3 5 7
+ * expect args like -st 5 -sl 3 -m 2 -dm 1 3 5 7
  * dm(세부 학과: ex 경제학과, 문화와 예술 등등), m(학과: 교양과목, 이과대학, 상경대학) is expected single digit
  */
 fun reviewArgParser(args: Array<String>): ReviewArgs {
     validateCondition(6 <= args.size)
     validateCondition(args[0] == "-st")
-    validateCondition(args[2] == "-m")
-    validateCondition(args[4] == "-dm")
+    validateCondition(args[2] == "-sl")
+    validateCondition(args[4] == "-m")
+    validateCondition(args[6] == "-dm")
 
-    args.filterIndexed { idx, _ -> idx !in arrayOf(0, 2, 4) }
+    args.filterIndexed { idx, _ -> idx !in arrayOf(0, 2, 4, 6) }
         .forEach { validateCondition(isNumeric(it)) }
 
     // parse
     return ReviewArgs(
         args[1].toInt(),
         args[3].toInt(),
-        args.slice(5..<args.size).map { it.toInt() }
+        args[5].toInt(),
+        args.slice(7..<args.size).map { it.toInt() }
     )
 }

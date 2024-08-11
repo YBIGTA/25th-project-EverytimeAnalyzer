@@ -15,13 +15,15 @@ import org.slf4j.LoggerFactory
 import java.time.Duration
 
 
-object LectureReviewSelector{
+object LectureReviewSelector {
     val review = "body > div:nth-child(1) > div > div.pane > div > div.articles .text"
 }
+
 class LectureReviewRequest(
     private val driver: WebDriver,
     private val timeout: Long,
-    private val sleepTime: Int
+    private val sleepTime: Int,
+    private val scrollLimit: Int
 ) {
     private val logger: Logger = LoggerFactory.getLogger(LectureReviewRequest::class.java)
     private val actions: Actions = Actions(driver)
@@ -42,7 +44,7 @@ class LectureReviewRequest(
         sleep(1)
         var prevReviewSize: Int = 0
         try {
-            while (true) {
+            for (i in 0..<scrollLimit) {
                 sleep(sleepTime)
                 val currentTrSize: Int = scrollDown()
                 if (prevReviewSize == currentTrSize)

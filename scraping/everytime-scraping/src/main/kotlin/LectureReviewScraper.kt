@@ -17,12 +17,13 @@ class LectureReviewScraper(
     driver: WebDriver,
     private val sleepTime: Int,
     timeout: Long,
+    scrollLimit: Int,
     private val mongoRepository: MongoRepository<LectureReviewWithMetaData>,
     private val loginOut: LoginOut
 ) {
     private val logger: Logger = LoggerFactory.getLogger(LectureReviewScraper::class.java)
     private val lectureBoardRequest = LectureBoardRequest(driver, timeout, sleepTime)
-    private val lectureReviewRequest = LectureReviewRequest(driver, timeout, sleepTime)
+    private val lectureReviewRequest = LectureReviewRequest(driver, timeout, sleepTime, scrollLimit)
 
     fun login() {
         loginOut.loginPage()

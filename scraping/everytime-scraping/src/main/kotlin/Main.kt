@@ -38,12 +38,13 @@ fun main(args: Array<String>) {
         driver,
         sleepTime,
         timeout,
+        args.scrollLimit,
         mongoRepository,
         loginOut
     )
 
     lectureReviewScraper.login()
-    for (i in args.detailedMajorNthList.indices){
+    for (i in args.detailedMajorNthList.indices) {
         lectureReviewScraper.scrape(args.majorNth, args.detailedMajorNthList[i])
     }
     lectureReviewScraper.logout()
