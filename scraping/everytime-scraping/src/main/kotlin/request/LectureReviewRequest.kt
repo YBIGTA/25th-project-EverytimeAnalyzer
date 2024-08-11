@@ -4,6 +4,7 @@ import org.example.sleep
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.openqa.selenium.By
+import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.interactions.Actions
@@ -41,12 +42,17 @@ class LectureReviewRequest(
         driver.get("https://everytime.kr${urlPrefix}?tab=article")
         sleep(1)
         var prevReviewSize: Int = 0
-        while (true) {
-            sleep(sleepTime)
-            val currentTrSize: Int = scrollDown()
-            if (prevReviewSize == currentTrSize)
-                break
-            prevReviewSize = currentTrSize
+        try {
+            while (true) {
+                sleep(sleepTime)
+                val currentTrSize: Int = scrollDown()
+                if (prevReviewSize == currentTrSize)
+                    break
+                prevReviewSize = currentTrSize
+            }
+        } catch (e: TimeoutException) {
+            if (prevReviewSize != 0)
+                logger.warn("error occur when scraping page: ${urlPrefix} error: ${e}")
         }
         logger.info("detected {} reviews", prevReviewSize)
         return Jsoup.parse(driver.pageSource)
