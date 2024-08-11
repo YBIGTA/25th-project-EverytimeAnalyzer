@@ -3,11 +3,13 @@ package org.example.request
 import org.example.sleep
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
+import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.Duration
+import kotlin.math.log
 
 object LoginOutSelector {
     val idInput: String = "body > div:nth-child(2) > div > form > div.input > input[type=text]:nth-child(1)"
@@ -28,21 +30,25 @@ class LoginOut(
     private val logger: Logger = LoggerFactory.getLogger(LoginOut::class.java)
 
     fun loginPage() {
+        val loginPageSleepTime: Int = 1
         driver.get(EVERY_TIME_LOGIN_URL)
-
         sleep(sleepTime)
+        // actions.moveByOffset(100, 100).click().perform()
         WebDriverWait(driver, Duration.ofSeconds(timeout))
             .until(ExpectedConditions.elementToBeClickable(By.cssSelector(LoginOutSelector.idInput)))
-            .sendKeys(everytimeId)
-
-        sleep(sleepTime)
-
+            .also {
+                it.click()
+                sleep(loginPageSleepTime)
+                it.sendKeys(everytimeId)
+            }
         WebDriverWait(driver, Duration.ofSeconds(timeout))
             .until(ExpectedConditions.elementToBeClickable(By.cssSelector(LoginOutSelector.pwInput)))
-            .sendKeys(everytimePassword)
-
-        sleep(sleepTime)
-
+            .also {
+                it.click()
+                sleep(loginPageSleepTime)
+                it.sendKeys(everytimePassword)
+            }
+        sleep(loginPageSleepTime)
         WebDriverWait(driver, Duration.ofSeconds(timeout))
             .until(ExpectedConditions.elementToBeClickable(By.cssSelector(LoginOutSelector.submmit)))
             .click()
