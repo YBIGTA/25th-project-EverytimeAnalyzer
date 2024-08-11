@@ -34,7 +34,6 @@ class LectureReviewRequest(
                 )
             )
         actions.moveToElement(reviews.first()).scrollToElement(reviews.last()).perform()
-        println("scrolling")
         return reviews.size
     }
 
