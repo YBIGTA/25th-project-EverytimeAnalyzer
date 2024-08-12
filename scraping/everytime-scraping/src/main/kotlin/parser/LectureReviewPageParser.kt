@@ -1,6 +1,5 @@
 package org.example.parser
 
-import org.bson.types.ObjectId
 import org.example.entity.LectureReview
 import org.jsoup.nodes.Document
 

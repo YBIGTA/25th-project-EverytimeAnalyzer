@@ -1,12 +1,5 @@
 package request
 
-import org.example.request.LectureBoardRequest
-import org.example.request.LectureReviewRequest
-import org.example.request.LoginOut
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
-import org.openqa.selenium.chrome.ChromeDriver
-
 class LectureReviewRequestTest {
     // // 단순히 작동하는 지 눈으로 확인
     // @Test

@@ -3,13 +3,11 @@ package org.example.request
 import org.example.sleep
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.Duration
-import kotlin.math.log
 
 object LoginOutSelector {
     val idInput: String = "body > div:nth-child(2) > div > form > div.input > input[type=text]:nth-child(1)"

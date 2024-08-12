@@ -32,7 +32,7 @@ class LectureBoardRequest(
     private val sleepTime: Int
 ) {
     private val lectureBoardPageUrl: String = "https://everytime.kr/timetable"
-    private val logger: Logger = LoggerFactory.getLogger(LoginOut::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(LectureBoardRequest::class.java)
     private val actions: Actions = Actions(driver)
 
     fun clickBtn(selector: String) = WebDriverWait(driver, Duration.ofSeconds(timeout))
