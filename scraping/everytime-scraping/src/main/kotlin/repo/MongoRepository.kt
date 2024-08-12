@@ -28,12 +28,6 @@ class MongoRepository<T : Any>(
 
     init {
         val connectionString: ConnectionString = ConnectionString(URL)
-        /**
-         * docker-compose로 스크래핑 코드와 mongodb를 같이 띄웠을 때
-         * 스크래핑 코드가 먼저 작동해서 db connection이 맺어지지 않은 대참사가 발생한다.
-         * docker단에서 해결해야하는 문제이지만 일단 그냥 sleep으로 임시방편
-         */
-        Thread.sleep(4000)
         client = MongoClient.create(connectionString)
     }
 

@@ -1,12 +1,5 @@
 package request
 
-import org.example.request.LectureReviewRequest
-import org.example.request.LoginOut
-import org.example.sleep
-import org.junit.jupiter.api.Assertions.*
-import org.openqa.selenium.chrome.ChromeDriver
-import kotlin.test.Test
-
 class LoginOutTest {
     // @Test
     // fun loginTest() {

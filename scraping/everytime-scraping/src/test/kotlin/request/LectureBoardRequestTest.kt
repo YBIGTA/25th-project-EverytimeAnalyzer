@@ -1,11 +1,5 @@
 package request
 
-import org.example.request.LectureBoardRequest
-import org.example.request.LoginOut
-import org.jsoup.nodes.Document
-import org.junit.jupiter.api.Test
-import org.openqa.selenium.chrome.ChromeDriver
-
 class LectureBoardRequestTest {
 
     // // 단순히 작동하는 지 눈으로 확인

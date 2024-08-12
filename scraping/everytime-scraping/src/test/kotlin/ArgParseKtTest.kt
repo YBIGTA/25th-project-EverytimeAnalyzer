@@ -1,20 +1,11 @@
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.testing.CliktCommandTestResult
 import com.github.ajalt.clikt.testing.test
-import org.example.ReviewArgs
 import org.example.ReviewScrap
-import org.example.reviewArgParser
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class ArgParseKtTest {
-    @Test
-    fun sample_test() {
-        val arr: Array<String> = arrayOf("-st", "5", "-sl", "3", "-m", "2", "-dm", "1", "3", "5")
-        val reviewArgParser: ReviewArgs = reviewArgParser(arr)
-        println(reviewArgParser)
-    }
-
     @Test
     fun clikt_test() {
         val reviewScrap: CliktCommand = ReviewScrap()
