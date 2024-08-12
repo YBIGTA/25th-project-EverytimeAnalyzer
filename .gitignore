@@ -20,3 +20,6 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+
+### pycharm ###
+__pycache__
