@@ -1,5 +1,12 @@
 package org.example
 
+import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.options.varargValues
+import com.github.ajalt.clikt.parameters.types.boolean
+import com.github.ajalt.clikt.parameters.types.int
 import org.example.entity.LectureReviewWithMetaData
 import org.example.repo.MongoRepository
 import org.example.request.LoginOut
@@ -7,6 +14,34 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.remote.RemoteWebDriver
 import java.net.URL
+
+class ReviewScrap : CliktCommand() {
+    val mongoUrl by option(envvar = "MONGO_URL")
+    val remoteDriverUrl by option(envvar = "REMOTE_DRIVER_URL")
+    val everytimeId by option(envvar = "EVERY_TIME_ID")
+    val everytimePW by option(envvar = "EVERY_TIME_PASSWORD")
+
+    val sleepTime: Int by option("-st").int().default(5)
+    val scrollLimit: Int by option("-sl").int().default(3)
+    val majorNth: Int by option("-m").int().required()
+    val detailedMajorList: List<Int> by option("-dm").int().varargValues().required()
+    val argParseDebug: Boolean by option("-debug").boolean().default(false)
+
+    override fun run() {
+        if (argParseDebug) {
+            echo("mongoURL: ${mongoUrl}")
+            echo("remoteDriverUrl: ${remoteDriverUrl}")
+            echo("everytimeId: ${everytimeId}")
+            echo("everytimePW: ${everytimePW}")
+            echo("sleepTime: ${sleepTime}")
+            echo("scrollLimit: ${scrollLimit}")
+            echo("majorNth: ${majorNth}")
+            echo("detailedMajor: ${detailedMajorList}")
+            return
+        }
+    }
+}
+
 
 fun main(args: Array<String>) {
     // parse args
