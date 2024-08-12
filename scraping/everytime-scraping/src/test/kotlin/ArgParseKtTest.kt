@@ -11,7 +11,7 @@ class ArgParseKtTest {
         val reviewScrap: CliktCommand = ReviewScrap()
         val result: CliktCommandTestResult = reviewScrap
             .test(
-                "-st 7 -sl 4 -m 3 -dm 11 9 30",
+                "-st 7 -sl 4 -m 3 -dm 11 9 30 -debug true",
                 envvars = mapOf(
                     "MONGO_URL" to "mongodb://localhost:27017",
                     "REMOTE_DRIVER_URL" to "http://localhost:4444",
