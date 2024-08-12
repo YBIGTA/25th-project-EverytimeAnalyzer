@@ -16,8 +16,7 @@ dependencies {
     implementation("org.mongodb:mongodb-driver-kotlin-sync:5.1.1")
     implementation("ch.qos.logback:logback-classic:1.5.6")
     implementation("org.slf4j:slf4j-api:2.0.13")
-
-
+    implementation("com.github.ajalt.clikt:clikt:4.2.2")
 }
 
 tasks.withType<Jar> {
