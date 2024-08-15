@@ -24,5 +24,8 @@ out/
 ### pycharm ###
 __pycache__
 
+### environment variables ###
+.env
+
 ### sample data and ideation ###
 sample/
