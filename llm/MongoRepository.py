@@ -1,7 +1,6 @@
 from pymongo import MongoClient, typings
-from pymongo.database import Database, Collection
 from pymongo.cursor import Cursor
-import pprint
+from pymongo.database import Database
 
 
 class MongoRepository:
@@ -10,7 +9,24 @@ class MongoRepository:
         self.client: MongoClient = MongoClient(host=host, port=port)
         self.db: Database = self.client["everytime"]
 
-    def find_lecture_data(self) -> list[dict]:
+    def find_syllabus_by_code(self, code: str) -> [dict | None]:
+        """
+        [
+            {
+                "_id": {"$oid": "66bfa1cb1cfc1c4f1cc168fc"},
+                "lectureCode": "YCA1004-03-00",
+                "syllabus": " 채플(4)"
+            },
+        ]
+        이런 형태로 반환
+        """
+        syllabus: [typings._DocumentType | None] = self.db.syllabus.find_one({'lectureCode': code})
+        if syllabus is None:
+            return None
+        else:
+            return dict(syllabus)
+
+    def find_all_lecture_data(self) -> list[dict]:
         """
         [
           {
@@ -27,11 +43,12 @@ class MongoRepository:
          },
         ]
         이런 형태로 반환
+        DB에 있는 강의 정보들 모두 반환
         """
         lecture_data_list: Cursor[typings._DocumentType] = self.db.lecture.find({})
         return list(lecture_data_list)
 
-    def find_reviews_by_lecture_code(self, code: str) -> list[str]:
+    def find_reviews_by_code(self, code: str) -> list[str]:
         """
         pipeline 변수: 학정번호 주어졌을때 학정번호에 해당하는 수강평 가져오는 쿼리
         [
@@ -41,7 +58,7 @@ class MongoRepository:
             }
         ]
         이런식으로 학정번호에 해당하는 강의평들을 리스트형식으로 리턴받는다.
-        따라서 result의 원소 개수는 1개입니다.
+        query 결과의 object 개수는 1개입니다.
         """
         pipeline = [
             {
