@@ -5,10 +5,13 @@ name = "pypi"
 
 [packages]
 pandas = "*"
-scikit-learn = "*"
-nltk = "*"
-notebook = "==6.5.6"
+kiwipiepy = "*"
+kss = "*"
 konlpy = "*"
+gensim = "*"
+plotly = "*"
+pyldavis = "*"
+nbformat = "*"
 
 [dev-packages]
 

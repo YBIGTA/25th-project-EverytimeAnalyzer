@@ -27,8 +27,8 @@ class MongoRepository<T : Any>(
     }
 
     init {
-        val connectionString: ConnectionString = ConnectionString(URL)
-        client = MongoClient.create(connectionString)
+        logger.info("mongo url: {}", URL)
+        client = MongoClient.create(URL)
     }
 
     fun insert(article: T, insertLog: String) {
