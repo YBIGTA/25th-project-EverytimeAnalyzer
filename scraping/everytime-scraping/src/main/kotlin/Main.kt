@@ -21,7 +21,11 @@ import org.openqa.selenium.remote.RemoteWebDriver
 import java.net.URL
 
 abstract class DefaultArgsParser(name: String) : CliktCommand(name) {
-    protected val mongoUrl by option(envvar = "MONGO_URL").required()
+    protected val mongoHost by option(envvar = "MONGO_HOST").required()
+    protected val mongoUsername by option(envvar = "MONGO_USERNAME").required()
+    protected val mongoPassword by option(envvar = "MONGO_PASSWORD").required()
+    protected val mongoPort by option(envvar = "MONGO_PORT").int().required()
+
     protected val remoteDriverUrl by option(envvar = "REMOTE_DRIVER_URL").required()
     protected val everytimeId by option(envvar = "EVERY_TIME_ID").required()
     protected val everytimePW by option(envvar = "EVERY_TIME_PASSWORD").required()
@@ -33,7 +37,11 @@ abstract class DefaultArgsParser(name: String) : CliktCommand(name) {
     protected val argParseDebug: Boolean by option("-debug").boolean().default(false)
 
     protected fun printArgs() {
-        echo("mongoURL: ${mongoUrl}")
+        echo("mongoHost: ${mongoHost}")
+        echo("mongoUsername: ${mongoUsername}")
+        echo("mongoPassword: ${mongoPassword}")
+        echo("mongoPort: ${mongoPort}")
+
         echo("remoteDriverUrl: ${remoteDriverUrl}")
         echo("everytimeId: ${everytimeId}")
         echo("everytimePW: ${everytimePW}")
@@ -60,6 +68,7 @@ class LectureInfoScrape : DefaultArgsParser("lecture") {
         // create remote web driver
         val driver: WebDriver = RemoteWebDriver(URL(remoteDriverUrl), ChromeOptions())
         val loginOut = LoginOut(driver, timeout, sleepTime, everytimeId, everytimePW)
+        val mongoUrl = mongoUrlBuilder(mongoHost, mongoPort, mongoUsername, mongoPassword)
         val mongoRepository: MongoRepository<LectureInfo> = MongoRepository.of<LectureInfo>(mongoUrl, "lecture")
         val lectureBoardRequest: LectureBoardRequest = LectureBoardRequest(driver, timeout, sleepTime)
 
@@ -87,6 +96,7 @@ class ReviewScrap : DefaultArgsParser("review") {
         // create remote web driver
         val driver: WebDriver = RemoteWebDriver(URL(remoteDriverUrl), ChromeOptions())
         val loginOut = LoginOut(driver, timeout, sleepTime, everytimeId, everytimePW)
+        val mongoUrl = mongoUrlBuilder(mongoHost, mongoPort, mongoUsername, mongoPassword)
         val mongoRepository: MongoRepository<LectureReviewWithMetaData> = MongoRepository.of<LectureReviewWithMetaData>(mongoUrl, "reviews")
 
         val lectureReviewScraper: LectureReviewScraper = LectureReviewScraper(

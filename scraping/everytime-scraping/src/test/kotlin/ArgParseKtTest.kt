@@ -16,11 +16,18 @@ class ArgParseKtTest {
                     "MONGO_URL" to "mongodb://localhost:27017",
                     "REMOTE_DRIVER_URL" to "http://localhost:4444",
                     "EVERY_TIME_ID" to "id",
-                    "EVERY_TIME_PASSWORD" to "pw"
+                    "EVERY_TIME_PASSWORD" to "pw",
+                    "MONGO_HOST" to "mongodb://localhost:27017",
+                    "MONGO_USERNAME" to "root",
+                    "MONGO_PASSWORD" to "ybigta135",
+                    "MONGO_PORT" to "27017"
                 )
             )
         val expected = """
-            mongoURL: mongodb://localhost:27017
+            mongoHost: mongodb://localhost:27017
+            mongoUsername: root
+            mongoPassword: ybigta135
+            mongoPort: 27017
             remoteDriverUrl: http://localhost:4444
             everytimeId: id
             everytimePW: pw
