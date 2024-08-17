@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 # import file
 def importData() -> list[str]:
-    with open('./sample.json', 'r', encoding='utf-8') as f:
+    with open('./data/sample.json', 'r', encoding='utf-8') as f:
         js = json.loads(f.read())
     df = pd.DataFrame(js)
     df_sim = pd.DataFrame({
@@ -94,7 +94,7 @@ if __name__ == '__main__':
     print('Number of unique tokens: %d' % len(dictionary))
     print('Number of documents: %d' % len(corpus))
 
-    lda_model = LdaMulticore(corpus=corpus, id2word=dictionary, num_topics=6, chunksize=1000, passes=7, alpha=0.1,
+    lda_model = LdaMulticore(corpus=corpus, id2word=dictionary, num_topics=5, chunksize=1000, passes=7, alpha=0.1,
                              eta=0.01)
 
     # 시각화 저장

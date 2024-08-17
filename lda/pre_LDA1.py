@@ -1,3 +1,6 @@
+"""
+doesn't work
+"""
 import logging
 import re
 
@@ -17,7 +20,7 @@ kiwi = Kiwi()
 import json
 import pandas as pd
 
-with open('./sample.json', 'r', encoding='utf-8') as f:
+with open('data/sample.json', 'r', encoding='utf-8') as f:
     js = json.loads(f.read())
 
 # DataFrame으로 변환
