@@ -4,9 +4,9 @@ from pymongo.database import Database
 
 
 class MongoRepository:
-    def __init__(self, host: str, port: int):
+    def __init__(self, host: str, port: int, username: str, password: str):
         # TODO: add exception handling logic
-        self.client: MongoClient = MongoClient(host=host, port=port)
+        self.client: MongoClient = MongoClient(host=host, port=port, username=username, password=password)
         self.db: Database = self.client["everytime"]
 
     def find_syllabus_by_code(self, code: str) -> [dict | None]:

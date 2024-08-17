@@ -1,12 +1,25 @@
 import os
 from MongoRepository import MongoRepository
 
-# host = os.getenv('MONGO_HOST')
-# if host is None:
-#     raise Exception("plese set env MONGO_HOST")
+# 환경변수로 mongodb host, password, username 설정
+# 임시로 주석처리하고 하드코딩해도 됩니다
+host = os.getenv('MONGO_HOST')
+pw = os.getenv('MONGO_PW')
+username = os.getenv('MONGO_USERNAME')
+if host is None:
+    raise Exception("please set env MONGO_HOST")
+if pw is None:
+    raise Exception("please set env MONGO_PW")
+if username is None:
+    raise Exception("please set env MONGO_USERNAME")
 
 # 일단 host ip 하드코딩
-repo: MongoRepository = MongoRepository("43.201.1.128", 27017)
+repo: MongoRepository = MongoRepository(
+    host,
+    27017,
+    username,
+    pw
+)
 
 # 강의 정보 모두 가져오기
 lecture_data_list: list[dict] = repo.find_all_lecture_data()
