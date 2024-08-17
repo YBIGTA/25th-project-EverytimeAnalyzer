@@ -1,5 +1,6 @@
 """
-LDA의 최적 topic parameter 구하기 위한 시각화 코드
+LDA의 최적 topic paramer 구하기 위한 시각화 코드
+실행하면 한 2~3분뒤에 브라우저에 topic개수에 따른 coherence 그래프창이 띄워집니다
 """
 import os.path
 
