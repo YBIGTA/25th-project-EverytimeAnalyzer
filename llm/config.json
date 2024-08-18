@@ -1,10 +1,9 @@
 {   
     "prompt": {
-        "system_prompt": "강의 정보를 바탕으로 강의 개요와 강의평을 요약하세요. 답변 형식에 맞추어 답변하세요.",
+        "system_prompt": "강의 정보를 바탕으로 강의 개요와 강의평을 요약하세요. 답변 형식에 맞추어 한국어로 답변하세요.",
         "user_prompt_template": "[강의 정보]\n- 강의명: {lecture_name}\n- 강의 개요: {syllabus}\n- 강의평: {reviews}\n\n[답변 형식]\n- 강의명: (강의명)\n- 강의 개요: (강의 개요 요약)\n- 강의평:\n    - 학점: (강의평에서 학점과 관련한 내용 요약)\n    - 로드: (강의평에서 로드와 관련한 내용 요약)\n    - 강의력: (강의평에서 강의력과 관련한 내용 요약)"
     },
     "hyperparameters": {
-        "temperature": 0.0,
-        "max_tokens": 4096
+        "max_tokens": 2048
     }
 }

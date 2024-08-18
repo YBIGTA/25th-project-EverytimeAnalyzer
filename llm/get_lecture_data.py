@@ -5,6 +5,9 @@ from typing import List, Dict, Optional
 from MongoRepository import MongoRepository
 
 def load_env_vars() -> dict:
+    '''
+    환경 변수 로드 및 확인
+    '''
     load_dotenv()
     
     env_vars = {
@@ -21,6 +24,9 @@ def load_env_vars() -> dict:
     return env_vars
 
 def get_syllabus_and_reviews(lecture_code: str, professor: str) -> Optional[Dict]:
+    '''
+    mongodb에서 lecture_code와 professor로 강의 개요와 강의평 가져오기
+    '''
     env_vars = load_env_vars()
 
     repo: MongoRepository = MongoRepository(

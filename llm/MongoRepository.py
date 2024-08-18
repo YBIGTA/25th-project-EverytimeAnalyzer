@@ -25,8 +25,7 @@ class MongoRepository:
             "type": ["대교", "전선"]
          },
         ]
-        이런 형태로 반환
-        DB에 있는 강의 정보들 모두 반환
+        위와 같은 형태로 DB의 모든 강의 정보들 반환
         """
         lecture_data_list: Cursor[typings._DocumentType] = self.db.lecture.find({})
         return list(lecture_data_list)
@@ -40,7 +39,7 @@ class MongoRepository:
                 "syllabus": " 채플(4)"
             },
         ]
-        이런 형태로 반환
+        위와 같은 형태로 강의 개요 반환
         """
         syllabus: [typings._DocumentType | None] = self.db.syllabus.find_one({'lectureCode': code})
         if syllabus is None:
@@ -57,8 +56,7 @@ class MongoRepository:
                 "reviews": ["강의평1", "강의평2", "강의평3"]
             }
         ]
-        이런식으로 학정번호에 해당하는 강의평들을 리스트형식으로 리턴받는다.
-        query 결과의 object 개수는 1개입니다.
+        위와 같은 형태로 강의평 반환. 강의평은 1개의 리스트 형태.
         """
         pipeline = [
             {
