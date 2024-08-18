@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+numpy = "*"
+gensim = "*"
+kiwipiepy = "*"
+kss = "*"
+plotly = "*"
+pandas = "*"
+tqdm = "*"
+py-hanspell = {git = "git+https://github.com/ssut/py-hanspell.git"}
+sentence-transformers = "*"
+tf-keras = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"
+python_full_version = "3.11.9"

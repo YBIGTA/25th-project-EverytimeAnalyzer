@@ -29,3 +29,6 @@ __pycache__
 
 ### sample data and ideation ###
 sample/
+
+### logs ###
+output.log
