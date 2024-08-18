@@ -1,22 +1,26 @@
 import os
+from dotenv import load_dotenv
 from MongoRepository import MongoRepository
 
 # 환경변수로 mongodb host, password, username 설정
-# 임시로 주석처리하고 하드코딩해도 됩니다
+load_dotenv()
 host = os.getenv('MONGO_HOST')
-pw = os.getenv('MONGO_PW')
+port = int(os.getenv('MONGO_PORT'))
 username = os.getenv('MONGO_USERNAME')
+pw = os.getenv('MONGO_PW')
+
 if host is None:
     raise Exception("please set env MONGO_HOST")
+if port is None:
+    raise Exception("please set env MONGO_PORT")
 if pw is None:
     raise Exception("please set env MONGO_PW")
 if username is None:
     raise Exception("please set env MONGO_USERNAME")
 
-# 일단 host ip 하드코딩
 repo: MongoRepository = MongoRepository(
     host,
-    27017,
+    port,
     username,
     pw
 )
@@ -24,19 +28,25 @@ repo: MongoRepository = MongoRepository(
 # 강의 정보 모두 가져오기
 lecture_data_list: list[dict] = repo.find_all_lecture_data()
 
-for lecture_data in lecture_data_list:
-    syllabus: [dict | None] = repo.find_syllabus_by_code(lecture_data['code'])
-    reviews: list[str] = repo.find_reviews_by_code(lecture_data["code"])
+# 강의 코드와 교수님 이름으로 강의 선택
+lecture_code = "UCE1105"
+professor = "강철"
 
-    # 데이터 정합성이 맞지 않아 학정번호에 해당되는 강의개요, 후기들이 없을경우 우선 pass
-    # 최대한 정합성을 맞추려고 노렸했당.
-    if syllabus is None or len(reviews) == 0:
-        print(f"can't find syllabus or reviews with code:{lecture_data['code']}")
-        continue
+with open("./lecture_reviews.txt", "w", encoding="utf-8") as file:
 
-    print("-----")
-    print(f"code: {lecture_data['code']}")
-    print(f"lecture_name:{lecture_data['name']}")
-    print(f"syllabus:{syllabus['syllabus']}")
-    for idx, review in enumerate(reviews):
-        print(f"\t review({idx}): {review}")
+    for lecture_data in lecture_data_list:
+        if lecture_data['code'][:7] == lecture_code and professor in lecture_data['professorList']:
+            syllabus: [dict | None] = repo.find_syllabus_by_code(lecture_data['code'])
+            reviews: list[str] = repo.find_reviews_by_code(lecture_data["code"])
+
+            if syllabus is None or len(reviews) == 0:
+                file.write(f"can't find syllabus or reviews with code:{lecture_data['code']}\n")
+                continue
+
+            file.write("-----\n")
+            file.write(f"code: {lecture_data['code']}\n")
+            file.write(f"lecture_name:{lecture_data['name']}\n")
+            file.write(f"professor: {', '.join(lecture_data['professorList'])}\n")
+            file.write(f"syllabus:{syllabus['syllabus']}\n")
+            for idx, review in enumerate(reviews):
+                file.write(f"\t review({idx}): {review}\n")

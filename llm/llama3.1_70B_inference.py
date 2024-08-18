@@ -17,6 +17,7 @@ course_overview = data["course_overview"]
 course_review = data["course_reviews"]
 
 # Define input
+# TODO: prompt 받는 부분 따로 모듈화
 system_message = "강의 정보를 바탕으로 강의 개요와 강의평을 요약하세요. 답변 형식에 맞추어 답변하세요."
 user_message = f"""
 [강의 정보]
@@ -44,7 +45,7 @@ api_request_json = {
     "max_tokens": 4096
     }
 
-# Make your request and handle the response
+# Make your request and handle the responses
 response = llama.run(api_request_json)
 result = response.json()['choices'][0]['message']['content']
 print(result)

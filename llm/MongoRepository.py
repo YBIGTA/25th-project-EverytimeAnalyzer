@@ -9,23 +9,6 @@ class MongoRepository:
         self.client: MongoClient = MongoClient(host=host, port=port, username=username, password=password)
         self.db: Database = self.client["everytime"]
 
-    def find_syllabus_by_code(self, code: str) -> [dict | None]:
-        """
-        [
-            {
-                "_id": {"$oid": "66bfa1cb1cfc1c4f1cc168fc"},
-                "lectureCode": "YCA1004-03-00",
-                "syllabus": " 채플(4)"
-            },
-        ]
-        이런 형태로 반환
-        """
-        syllabus: [typings._DocumentType | None] = self.db.syllabus.find_one({'lectureCode': code})
-        if syllabus is None:
-            return None
-        else:
-            return dict(syllabus)
-
     def find_all_lecture_data(self) -> list[dict]:
         """
         [
@@ -47,6 +30,23 @@ class MongoRepository:
         """
         lecture_data_list: Cursor[typings._DocumentType] = self.db.lecture.find({})
         return list(lecture_data_list)
+
+    def find_syllabus_by_code(self, code: str) -> [dict | None]:
+        """
+        [
+            {
+                "_id": {"$oid": "66bfa1cb1cfc1c4f1cc168fc"},
+                "lectureCode": "YCA1004-03-00",
+                "syllabus": " 채플(4)"
+            },
+        ]
+        이런 형태로 반환
+        """
+        syllabus: [typings._DocumentType | None] = self.db.syllabus.find_one({'lectureCode': code})
+        if syllabus is None:
+            return None
+        else:
+            return dict(syllabus)
 
     def find_reviews_by_code(self, code: str) -> list[str]:
         """
