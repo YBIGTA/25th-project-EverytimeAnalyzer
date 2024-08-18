@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-fastapi = "*"
 pymongo = "*"
+fastapi = {extras = ["standard"], version = "*"}
 
 [dev-packages]
 
