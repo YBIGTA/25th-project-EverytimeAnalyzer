@@ -28,8 +28,8 @@ onMounted(async () => {
   box-sizing: border-box;
   display: flex;
   border: black solid 1px;
-  width: 200px;
-  height: 100px;
+  width: 170px;
+  height: 90px;
   padding: 10px;
   margin: 10px;
 }

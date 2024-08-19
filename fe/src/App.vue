@@ -16,34 +16,47 @@ function getRecommendLectureCodes(codes) {
 </script>
 
 <template>
-  <SearchBar @getRecommendLectureCodes="getRecommendLectureCodes"/>
-
-  <div class="lecture-table">
-    <div v-for="(lectureCode, idx) in lectureCodes.codes" :key="idx">
-      <LectureTable :host="host"
-                    :path="'/lecture/'+lectureCode"
-                    @click="reviewIdx=idx"
-      />
-    </div>
-  </div>
-
-  <div class="review-table">
-    <div v-if="0 <= reviewIdx">
-      <ReviewList :host="host"
-                  :path="'/reviews/'+lectureCodes.codes[reviewIdx]"
-<!--                  key값이 바뀌면 다시 랜더링한다.-->
-                  :key="reviewIdx"
-      />
-    </div>
+  <div class="container">
+    <SearchBar @getRecommendLectureCodes="getRecommendLectureCodes"/>
+    <article>
+      <div class="lecture-table">
+        <div v-for="(lectureCode, idx) in lectureCodes.codes" :key="idx">
+          <LectureTable :host="host"
+                        :path="'/lecture/'+lectureCode"
+                        @click="reviewIdx=idx"
+          />
+        </div>
+      </div>
+      <div class="review-table">
+        <div v-if="0 <= reviewIdx">
+          <ReviewList :host="host"
+                      :path="'/reviews/'+lectureCodes.codes[reviewIdx]"
+                      :key="reviewIdx"
+          />
+        </div>
+      </div>
+    </article>
   </div>
 </template>
 
 <style>
-.review-table {
+.container {
+  width: 100%;
+  border: 1px solid blue;
+  display: flex;
+  justify-content: space-between;
+
+}
+article {
+  width: 50%;
+  border: 1px solid red;
+}
+
+article .lecture-table {
   display: flex;
 }
 
-.lecture-table {
-  display: flex;
+article .review-table {
+  border: 1px solid chocolate;
 }
 </style>
