@@ -1,9 +1,13 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineProps } from 'vue'
+const props = defineProps({
+  host: String,
+  path: String,
+})
 const reviewList = ref([])
 
 onMounted(async () => {
-  reviewList.value = await fetch("http://localhost:8000/reviews/UCE1105-01-00")
+  reviewList.value = await fetch(props.host + props.path)
       .then(response => response.json())
       // .then(out => out.slice(0, 10))
   reviewList.value = reviewList.value.slice(0, 8)
