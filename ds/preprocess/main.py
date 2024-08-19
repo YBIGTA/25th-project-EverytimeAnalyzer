@@ -4,9 +4,9 @@ import pandas as pd
 from tqdm import tqdm
 from data_processing import load_json, prepare_dataframe
 from text_processing import split_sentences, normalize_text
-from embedding import load_model, generate_embeddings
+from embedding import load_model, generate_embeddings_batch
 
-def process_reviews(input_json: str, output_json: str) -> None:
+def process_reviews(input_json: str, processed_json: str, output_json: str) -> None:
     # json 파일로부터 데이터를 불러와서 강의별로 그룹화
     df = load_json(input_json)
     df = prepare_dataframe(df)
@@ -20,12 +20,17 @@ def process_reviews(input_json: str, output_json: str) -> None:
         normalized_contents.append(normalized_sentences)
     df['content_normalized'] = normalized_contents
 
+    # 중간 저장
+    result = df.to_dict(orient='records')
+    with open(processed_json, 'w', encoding='utf-8') as f:
+        json.dump(result, f, ensure_ascii=False, indent=4)
+
     # 문장별 embedding vector 생성
     model = load_model()
 
     sentence_embeddings = []
     for sentences in tqdm(df['content_normalized'], desc="Generating embeddings"):
-        embeddings = generate_embeddings(model, sentences)
+        embeddings = generate_embeddings_batch(model, sentences)
         sentence_embeddings.append(embeddings)
     df['sentence_embeddings'] = sentence_embeddings
     
@@ -36,7 +41,11 @@ def process_reviews(input_json: str, output_json: str) -> None:
 
 
 if __name__ == "__main__":
-    input_json_path = os.path.join(os.path.dirname(__file__), '../data/sample.json')
-    output_json_path = os.path.join(os.path.dirname(__file__), '../data/output.json')
+    input_json_path = "/Users/jieunpark/Desktop/25th-project-EverytimeAnalyzer/ds/data/raw.json"
+    processed_json_path = "/Users/jieunpark/Desktop/25th-project-EverytimeAnalyzer/ds/data/processed.json"
+    output_json_path = "/Users/jieunpark/Desktop/25th-project-EverytimeAnalyzer/ds/data/embedding.json"
+    # input_json_path = os.path.join(os.path.dirname(__file__), '../data/sample.json')
+    # processed_json_path = os.path.join(os.path.dirname(__file__), '../data/processed.json')
+    # output_json_path = os.path.join(os.path.dirname(__file__), '../data/output.json')
 
-    process_reviews(input_json_path, output_json_path)
+    process_reviews(input_json_path, processed_json_path, output_json_path)

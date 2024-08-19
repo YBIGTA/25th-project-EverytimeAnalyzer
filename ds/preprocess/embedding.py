@@ -11,18 +11,18 @@ def load_model(model_name: str = 'jhgan/ko-sroberta-multitask') -> SentenceTrans
     """
     return SentenceTransformer(model_name)
 
-def encode_batch(model: SentenceTransformer, batch):
+def generate_embedding(model: SentenceTransformer, sentences: list[str]) -> list:
     """
-    배치별 embedding vector 생성
+    문장별 embedding vector 생성
     Args:
         - model: embedding에 사용할 SentenceTransformer 모델
         - sentences: 문장 리스트
     """
-    return model.encode(batch)
+    return model.encode(sentences)
 
-def generate_embeddings_faster(model: SentenceTransformer, sentences: list[str], batch_size: int = 64) -> list:
+def generate_embeddings_batch(model: SentenceTransformer, sentences: list[str], batch_size: int = 64) -> list:
     """
-    문장별 embedding vector 생성
+    배치별 embedding vector 생성
     Args:
         - model: embedding에 사용할 SentenceTransformer 모델
         - sentences: 문장 리스트
