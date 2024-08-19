@@ -10,7 +10,6 @@ const lectureInfo = ref({});
 onMounted(async () => {
   lectureInfo.value = await fetch(props.host + props.path)
       .then(response => response.json())
-  console.log(lectureInfo.value);
 })
 
 </script>
