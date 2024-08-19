@@ -1,7 +1,8 @@
 import os
 import json
 import pandas as pd
-from data_processing import load_json, save_to_csv, prepare_dataframe, group_lectures
+from tqdm import tqdm
+from data_processing import load_json, prepare_dataframe
 from text_processing import split_sentences, normalize_text
 from embedding import load_model, generate_embeddings
 
@@ -9,19 +10,24 @@ def process_reviews(input_json: str, output_json: str) -> None:
     # json 파일로부터 데이터를 불러와서 강의별로 그룹화
     df = load_json(input_json)
     df = prepare_dataframe(df)
-    df = group_lectures(df)
     
     # 문장 단위로 분리 및 전처리
     df['content_split'] = df['content'].apply(lambda x: split_sentences([x]))
-    df['content_normalized'] = df['content_split'].apply(
-        lambda sentences: [normalize_text(sentence) for sentence in sentences]
-    )
-    
+
+    normalized_contents = []
+    for sentences in tqdm(df['content_split'], desc="Normalizing text"):
+        normalized_sentences = [normalize_text(sentence) for sentence in sentences]
+        normalized_contents.append(normalized_sentences)
+    df['content_normalized'] = normalized_contents
+
     # 문장별 embedding vector 생성
     model = load_model()
-    df['sentence_embeddings'] = df['content_normalized'].apply(
-        lambda sentences: generate_embeddings(model, sentences)
-    )
+
+    sentence_embeddings = []
+    for sentences in tqdm(df['content_normalized'], desc="Generating embeddings"):
+        embeddings = generate_embeddings(model, sentences)
+        sentence_embeddings.append(embeddings)
+    df['sentence_embeddings'] = sentence_embeddings
     
     # 저장
     result = df.to_dict(orient='records')
