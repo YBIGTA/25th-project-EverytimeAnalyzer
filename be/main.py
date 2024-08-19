@@ -6,6 +6,8 @@ from env import load_env_vars
 app = FastAPI()
 env_vars = load_env_vars()
 repo = MongoRepository(env_vars["host"], env_vars["port"], env_vars["username"], env_vars["pw"])
+
+
 """
 학정번호가 주어졌을 때 강의 정보 반환
 
@@ -13,7 +15,6 @@ ex) /lecture/RUS3127-01-00
 """
 @app.get("/lecture/{lecture_code}")
 def get_lecture(lecture_code: str):
-    # 임시
     lecture: Optional[dict] = repo.find_lecture_info(lecture_code)
     del lecture["_id"]
     return lecture
