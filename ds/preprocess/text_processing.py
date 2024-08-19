@@ -23,11 +23,10 @@ def normalize_text(text: str) -> str:
     text = re.sub(r'\s+', ' ', text)
     text = re.sub(r'[^가-힣a-zA-Z0-9\s.,!?]', '', text)
     
-    # try:
-    #     checked_text = spell_checker.check(text).as_dict()['checked']
-    # except Exception as e:
-    #     print(f"Spell check failed for text: {text}. Error: {e}")
-    #     checked_text = text
-    checked_text = spell_checker.check(text).as_dict()['checked']
+    try:
+        checked_text = spell_checker.check(text).as_dict()['checked']
+    except Exception as e:
+        print(f"Spell check failed for text: {text}. Error: {e}")
+        checked_text = text
     
     return checked_text

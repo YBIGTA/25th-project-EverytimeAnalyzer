@@ -17,6 +17,7 @@ tf-keras = "*"
 requests = "*"
 python-mecab-ko = "*"
 konlpy = "*"
+matplotlib = "*"
 
 [dev-packages]
 

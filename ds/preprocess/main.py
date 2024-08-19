@@ -31,7 +31,9 @@ def process_reviews(input_json: str, processed_json: str, output_json: str) -> N
     sentence_embeddings = []
     for sentences in tqdm(df['content_normalized'], desc="Generating embeddings"):
         embeddings = generate_embeddings_batch(model, sentences)
+        embeddings = [embedding.tolist() for embedding in embeddings]
         sentence_embeddings.append(embeddings)
+
     df['sentence_embeddings'] = sentence_embeddings
     
     # 저장
@@ -41,11 +43,8 @@ def process_reviews(input_json: str, processed_json: str, output_json: str) -> N
 
 
 if __name__ == "__main__":
-    input_json_path = "/Users/jieunpark/Desktop/25th-project-EverytimeAnalyzer/ds/data/raw.json"
-    processed_json_path = "/Users/jieunpark/Desktop/25th-project-EverytimeAnalyzer/ds/data/processed.json"
-    output_json_path = "/Users/jieunpark/Desktop/25th-project-EverytimeAnalyzer/ds/data/embedding.json"
-    # input_json_path = os.path.join(os.path.dirname(__file__), '../data/sample.json')
-    # processed_json_path = os.path.join(os.path.dirname(__file__), '../data/processed.json')
-    # output_json_path = os.path.join(os.path.dirname(__file__), '../data/output.json')
+    input_json_path = os.path.join(os.path.dirname(__file__), '../data/raw.json')
+    processed_json_path = os.path.join(os.path.dirname(__file__), '../data/processed.json')
+    output_json_path = os.path.join(os.path.dirname(__file__), '../data/embedding.json')
 
     process_reviews(input_json_path, processed_json_path, output_json_path)
