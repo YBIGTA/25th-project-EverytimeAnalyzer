@@ -1,24 +1,38 @@
 <script setup>
-import {sample_lecture_list} from "@/sample_data";
-console.log(sample_lecture_list);
+import {onMounted, ref, defineProps} from "vue";
+
+const props = defineProps({
+  host: String,
+  path: String,
+})
+const lectureInfo = ref({});
+
+onMounted(async () => {
+  lectureInfo.value = await fetch(props.host + props.path)
+      .then(response => response.json())
+  console.log(lectureInfo.value);
+})
+
 </script>
 
 <template>
   <div class="container">
-    <div v-for="lecture in sample_lecture_list" :key="lecture.name" class="lectureBoard">
-      <p> {{lecture.name }}</p>
-      <p> {{lecture.code }}</p>
-      <p> {{lecture.professorList }}</p>
+    <div>
+      <div>{{lectureInfo.code}}</div>
+      <div>{{lectureInfo.name}}</div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .container {
+  box-sizing: border-box;
   display: flex;
+  border: black solid 1px;
+  width: 200px;
+  height: 100px;
+  padding: 10px;
+  margin: 10px;
 }
 
-.lectureBoard {
-  margin: 10px 20px;
-}
 </style>
