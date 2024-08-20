@@ -27,6 +27,8 @@ konlpy = "*"
 matplotlib = "*"
 pyldavis = "*"
 nbformat = "*"
+ijson = "*"
+chromadb = "*"
 
 [dev-packages]
 
