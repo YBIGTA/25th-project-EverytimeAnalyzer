@@ -2,8 +2,23 @@ from fastapi import FastAPI
 from MongoRepository import MongoRepository
 from typing import Optional
 from env import load_env_vars
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+origins = [
+    "http://localhost:8080",
+    "http://localhost",
+    # "http://localhost:8080"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 env_vars = load_env_vars()
 repo = MongoRepository(env_vars["host"], env_vars["port"], env_vars["username"], env_vars["pw"])
 
