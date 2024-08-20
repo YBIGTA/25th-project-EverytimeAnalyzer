@@ -4,12 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+fastapi = {extras = ["standard"], version = "*"}
+ollama = "*"
+ipykernel = "*"
+pandas = "*"
+openai = "*"
+llamaapi = "*"
+pymongo = "*"
+python-dotenv = "*"
 numpy = "*"
 gensim = "*"
 kiwipiepy = "*"
 kss = "*"
 plotly = "*"
-pandas = "*"
 tqdm = "*"
 py-hanspell = {git = "git+https://github.com/ssut/py-hanspell.git"}
 sentence-transformers = "*"
@@ -18,6 +25,8 @@ requests = "*"
 python-mecab-ko = "*"
 konlpy = "*"
 matplotlib = "*"
+pyldavis = "*"
+nbformat = "*"
 
 [dev-packages]
 
