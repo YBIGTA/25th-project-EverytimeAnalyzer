@@ -43,6 +43,11 @@ def get_recommend_lecture(topic1: str, topic2: str, topic3: str, topic4: str, to
     # 임시
     return {"topic1": topic1, "topic2": topic2,"topic3": topic3,"topic4": topic4,"topic5": topic5,}
 
+@app.get("/reviews/{lecture_code}")
+def get_reviews(lecture_code: str):
+    return repo.find_reviews(lecture_code)
+
+
 """
 학정번호가 주어졌을 때 llm의 강의 요약 반환
 ex) /llm/RUS3127-01-00
