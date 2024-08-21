@@ -23,7 +23,7 @@ function request() {
 
 <template>
   <div id="form-container">
-    <div v-for="idx in 3" :key="idx">
+    <div v-for="idx in 1" :key="idx">
       <div class="input-container">
         <label :v-for="'topic'+idx+'-form'">topic{{ idx }}</label>
         <input type="text" :id="'topic'+idx+'-form'">
