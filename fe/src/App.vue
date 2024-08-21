@@ -3,6 +3,7 @@ import {reactive, ref} from 'vue'
 import LectureTable from "@/components/LectureTable.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import ReviewList from "@/components/ReivewList.vue";
+import LLMSummary from "@/components/LLMSummary.vue";
 
 const host = "http://localhost:8000"
 // const sampleLectureCode = "UCE1105-01-00"
@@ -22,7 +23,12 @@ function getRecommendLectureCodes(codes) {
           :host="host"
           path="/model"
           @getRecommendLectureCodes="getRecommendLectureCodes"/>
-
+      <div v-if="0 <= reviewIdx">
+        <LLMSummary
+            :lectureCode="lectureCodes.codes[reviewIdx]"
+            :key="reviewIdx"
+        />
+      </div>
     </article>
     <article :key="lectureCodes.codes">
       <div class="lecture-table">
