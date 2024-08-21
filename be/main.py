@@ -32,7 +32,7 @@ sentence_transformer = SentenceTransformer('jhgan/ko-sroberta-multitask')
 
 mongo_repo = MongoRepository(env_vars["host"], env_vars["port"], env_vars["username"], env_vars["pw"])
 vector_repo = VectorRepository(HttpClient(env_vars["host"], 48000), sentence_transformer)
-llama_client = LlamaClient(env_vars["llama_token"], "../config/config.json")
+llama_client = LlamaClient(env_vars["llama_token"], "./config/config.json")
 
 
 # 학정번호가 주어졌을 때 강의 정보 반환
@@ -67,25 +67,32 @@ def get_recommend_lecture(query: str) -> list:
 # 각 topic별 distance 평균 반환
 @app.get("/model/sims/{lecture_code}/")
 def get_sims_by_topic(lecture_code: str, query: str) -> dict:
-    # 쿼리 문장 topic에 따라 분류
-    query_topic = utils.classify_query_by_topic(query)
+    # TODO: input 형식 체크
+    split_query:list[str] = query.split(".")
+    if split_query[-1] == "":
+        del split_query[-1]
+    distance_avg_map=  vector_repo.get_reviews_distance_matrix(lecture_code, split_query)
+    return distance_avg_map
 
-    # topic에 따라 분류된 embedded reviews
-    topic_reviews_dict = vector_repo.get_embedded_review(lecture_code)
-
-    topic_sim_avg = dict()
-    for topic_idx, q in query_topic.items():
-        embedded_reviews = topic_reviews_dict[topic_map[topic_idx]]
-        sim_sum = 0
-        for review in embedded_reviews:
-            embedded_query = sentence_transformer.encode(q)
-            sim = cos_sim(embedded_query, np.array(review))
-            sim_sum += sim
-        if len(embedded_reviews) == 0:
-            continue
-        topic_sim_avg[topic_idx] = sim_sum / len(embedded_reviews)
-
-    return topic_sim_avg
+    # # 쿼리 문장 topic에 따라 분류
+    # query_topic = utils.classify_query_by_topic(query)
+    #
+    # # topic에 따라 분류된 embedded reviews
+    # topic_reviews_dict = vector_repo.get_embedded_review(lecture_code)
+    #
+    # topic_sim_avg = dict()
+    # for topic_idx, q in query_topic.items():
+    #     embedded_reviews = topic_reviews_dict[topic_map[topic_idx]]
+    #     sim_sum = 0
+    #     for review in embedded_reviews:
+    #         embedded_query = sentence_transformer.encode(q)
+    #         sim = cos_sim(embedded_query, np.array(review))
+    #         sim_sum += sim
+    #     if len(embedded_reviews) == 0:
+    #         continue
+    #     topic_sim_avg[topic_idx] = sim_sum / len(embedded_reviews)
+    #
+    # return topic_sim_avg
 
 
 @app.get("/reviews/{lecture_code}")

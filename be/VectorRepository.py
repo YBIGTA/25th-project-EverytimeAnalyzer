@@ -1,6 +1,7 @@
+from collections import defaultdict
+
 from chromadb import ClientAPI, Collection, QueryResult, GetResult
 from sentence_transformers import SentenceTransformer
-from collections import defaultdict
 
 import utils
 
@@ -22,7 +23,6 @@ class VectorRepository:
     #     )
     #     return sum(result["distances"][0])
 
-
     def get_reviews(self, lecture_code: str, query: str):
         topics = ["학점", "교수님 강의스타일 및 강의력", "수업 내용", "로드", "시험 출제 스타일"]
         results = dict()
@@ -32,7 +32,6 @@ class VectorRepository:
                 where={"code": lecture_code, "topic": topic},
                 n_results=15
             )
-
 
     def find_top_similar_lecture(self, query: str, topic: str) -> QueryResult:
         result: QueryResult = self.collection.query(
@@ -58,6 +57,27 @@ class VectorRepository:
 
         return topic_reviews_dict
 
+    def get_reviews_distance_matrix(self, lecture_code: str, queries: list[str])-> dict:
+        embedded_queries = list(map(lambda x: self.embed_sentence(x), queries))
+        results: QueryResult = self.collection.query(
+            query_embeddings=embedded_queries,
+            where={"code": lecture_code},
+            n_results=100
+        )
+        distance_matrix: list[list[float]] =  results["distances"]
+        distance_avg_map = {}
+        for idx in range(len(queries)):
+            if len(distance_matrix[idx]) != 0:
+                distance_avg_map[queries[idx]]  = sum(distance_matrix[idx]) / len(distance_matrix[idx])
+            else:
+                distance_avg_map[queries[idx]] = None
+
+        return distance_avg_map
+        # distance를 반환 로직 변경될 수 있다.
+        print()
+
+
+
     def get_reviews_by_query(self, query: str, topic_idx: int, n: int):
         embedded_query = self.transformer.encode(query).reshape(1, -1)
         query_result: QueryResult = self.collection.query(
@@ -80,7 +100,3 @@ class VectorRepository:
             }
             result.append(element)
         return result
-
-
-
-
