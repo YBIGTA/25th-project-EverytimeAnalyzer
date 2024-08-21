@@ -4,9 +4,11 @@ from MongoRepository import MongoRepository
 from VectorRepository import VectorRepository
 from env import load_env_vars
 from collections import defaultdict
+from sentence_transformers import SentenceTransformer
 
 
 env_vars = load_env_vars()
+sentence_transformer =  SentenceTransformer('jhgan/ko-sroberta-multitask')
 repo = MongoRepository(env_vars["host"], env_vars["port"], env_vars["username"], env_vars["pw"])
 vector_repo = VectorRepository(HttpClient(env_vars["host"], 48000))
 
