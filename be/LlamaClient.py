@@ -29,6 +29,7 @@ class LlamaClient:
             reviews=reviews
         )
 
+    #TODO: reviews가 너무 많을 경우 일부만 request에 포함하기
     def request(self, lecture_info: dict, reviews: list[str], syllabus: str) -> str:
 
         user_prompt = self.build_user_prompt(reviews, syllabus, lecture_info)
@@ -49,5 +50,3 @@ class LlamaClient:
 
         except Exception as e:
             logging.error("api 호출 중 오류 발생: %s", str(e))
-
-
