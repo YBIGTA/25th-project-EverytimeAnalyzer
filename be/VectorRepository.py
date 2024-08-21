@@ -1,39 +1,32 @@
-from chromadb import ClientAPI, Collection, QueryResult
-from sentence_transformers import SentenceTransformer
 from decimal import Decimal
 
-
-def decimalToFloat(matrix: list[list[Decimal]]) -> list[list[float]]:
-    result = []
-    for row in matrix:
-        tmp = list(map(float, row))
-        result.append(tmp)
-    return result
+from chromadb import ClientAPI, Collection, QueryResult
+from sentence_transformers import SentenceTransformer
 
 
 class VectorRepository:
-    def __init__(self, client: ClientAPI):
-        collection_name = "lecture_reviews"
+    def __init__(self, client: ClientAPI, transformer: SentenceTransformer):
         self.client: ClientAPI = client
+        # TODO: excpetion
+        self.collection: Collection = client.get_collection("lecture_reviews")
         print("loading transformer")
-        self.transformer: SentenceTransformer = SentenceTransformer('jhgan/ko-sroberta-multitask')
+        self.transformer: SentenceTransformer = transformer
         print("loading transformer complete")
 
-        # TODO: excpetion
-        self.collection: Collection = client.get_collection(collection_name)
+    def embed_sentence(self, sentence: str):
+        return list(map(float, self.transformer.encode(sentence)))
 
-    def calculate_similarity(self, lecture_code: str, query: str) -> float:
-        result = self.collection.query(
-            query_embeddings=list(map(float, self.transformer.encode(query))),
-            where={'code': lecture_code},
-            n_results=100
+    # def calculate_similarity(self, lecture_code: str, query: str) -> float:
+    #     result = self.collection.query(
+    #         query_embeddings= self.embed_sentence(query),
+    #         where={'code': lecture_code},
+    #     )
+    #     return sum(result["distances"][0])
+
+    def find_top_similar_lecture(self, query: str, topic: str) -> QueryResult:
+        result: QueryResult = self.collection.query(
+            query_embeddings=self.calculate_similarity(query),
+            where={"topic": topic},
+            n_results=50
         )
-        return sum(result["distances"][0])
-
-
-    def find_top_similar_lecture(self, query: str, n: int) -> list[str]:
-        result: QueryResult =  self.collection.query(
-            query_embeddings= list(map(float, self.transformer.encode(query)))
-        )
-
-        return  result
+        return result

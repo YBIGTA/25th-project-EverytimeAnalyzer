@@ -54,3 +54,17 @@ class MongoRepository:
             return None
         else:
             return syllabus["syllabus"]
+
+    def get_all_lecture_codes(self) -> list[str]:
+        pipeline = [
+            {'$group':
+                {
+                    '_id': '$lectureCode',
+                }
+            }
+        ]
+        result = self.db.reviews.aggregate(pipeline)
+        result = list(result)
+        result = list(map(lambda x: x['_id'], result))
+        return result
+
