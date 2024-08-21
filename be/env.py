@@ -8,7 +8,8 @@ def load_env_vars() -> dict:
         'host': os.getenv('MONGO_HOST'),
         'port': int(os.getenv('MONGO_PORT')),
         'username': os.getenv('MONGO_USERNAME'),
-        'pw': os.getenv('MONGO_PW')
+        'pw': os.getenv('MONGO_PW'),
+        'llama_token': os.getenv('LLAMA_TOKEN'),
     }
 
     for key, value in env_vars.items():

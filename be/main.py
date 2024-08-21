@@ -1,14 +1,15 @@
-from fastapi import FastAPI
-from MongoRepository import MongoRepository
 from typing import Optional
-from env import load_env_vars
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from LlamaClient import LlamaClient
+from MongoRepository import MongoRepository
+from env import load_env_vars
 
 app = FastAPI()
+
 origins = [
     "http://localhost:8080",
     "http://localhost",
-    # "http://localhost:8080"
 ]
 
 app.add_middleware(
@@ -21,7 +22,7 @@ app.add_middleware(
 
 env_vars = load_env_vars()
 repo = MongoRepository(env_vars["host"], env_vars["port"], env_vars["username"], env_vars["pw"])
-
+llama_client = LlamaClient(env_vars["llama_token"], "./config/config.json")
 
 """
 학정번호가 주어졌을 때 강의 정보 반환
@@ -41,7 +42,7 @@ ex) /model/?topic1="교수님 강의력이 좋은"&topic2="학점 잘주는"&top
 @app.get("/model/")
 def get_recommend_lecture(topic1: str, topic2: str, topic3: str, topic4: str, topic5: str):
     # 임시
-    return {"topic1": topic1, "topic2": topic2,"topic3": topic3,"topic4": topic4,"topic5": topic5,}
+    return {"topic1": topic1, "topic2": topic2, "topic3": topic3, "topic4": topic4, "topic5": topic5, }
 
 @app.get("/reviews/{lecture_code}")
 def get_reviews(lecture_code: str):
@@ -55,5 +56,13 @@ ex) /llm/RUS3127-01-00
 @app.get("/llm/{lecture_code}")
 def get_llm_summary(lecture_code: str):
     # 임시
-    return {"lecture_code": lecture_code}
+    syllabus: str = repo.find_syllabus(lecture_code)
+    reviews: list[str] = repo.find_reviews(lecture_code)
+    lecture_info: dict = repo.find_lecture_info(lecture_code)
 
+    summary = llama_client.request(
+        lecture_info,
+        reviews,
+        syllabus
+    )
+    return {"summary": summary}
