@@ -30,10 +30,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="lecture-container">
     <div>
       <div>{{lectureInfo.code}}</div>
       <div>{{lectureInfo.name}}</div>
+      <br>
+      <br>
       <div v-for="(value, key) in topicDistanceList" :key="key">
         <div> {{ key }}: {{ value }}</div>
       </div>
@@ -42,12 +44,12 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.container {
+.lecture-container {
   box-sizing: border-box;
   display: flex;
   border: black solid 1px;
   width: 170px;
-  height: 90px;
+  height: 200px;
   padding: 10px;
   margin: 10px;
 }

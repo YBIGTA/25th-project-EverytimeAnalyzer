@@ -13,25 +13,24 @@ const query = ref('')
 
 //TODO: exception control
 async function request() {
-      console.log("query in component: ", query.value)
-      let lectureCodeList = await fetch(props.host + props.path + "/?query=" + query.value)
-            .then(response => response.json())
+  console.log("query in component: ", query.value)
+  let lectureCodeList = await fetch(props.host + props.path + "/?query=" + query.value)
+      .then(response => response.json())
 
-    lectureCodeList.value = lectureCodeList.sort((a, b) => b[1] - a[1])
-    emit('getRecommendLectureCodes',
-        lectureCodeList.map(item => item[0]),
-        query.value
-    )
+  lectureCodeList.value = lectureCodeList.sort((a, b) => b[1] - a[1])
+  emit('getRecommendLectureCodes',
+      lectureCodeList.map(item => item[0]),
+      query.value
+  )
 }
 </script>
 
 <template>
   <div id="form-container">
-    <div v-for="idx in 1" :key="idx">
-      <div class="input-container">
-        <label :v-for="'topic'+idx+'-form'">topic{{ idx }}</label>
-        <input type="text" :id="'topic'+idx+'-form'" v-model="query">
-      </div>
+    <div class="input-container">
+<!--      <label :v-for="'topic'+idx+'-form'">topic{{ idx }}</label>-->
+      <label for="topic-form"> 입력창: </label>
+      <input type="text" id="topic-form" v-model="query">
     </div>
     <button id="input-submit" @click="request"> submit</button>
   </div>
@@ -41,7 +40,7 @@ async function request() {
 
 <style scoped>
 #form-container {
-  width: 50%;
+  width: 800px;
   border: 1px solid aqua;
 }
 
