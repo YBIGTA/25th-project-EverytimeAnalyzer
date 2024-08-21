@@ -9,9 +9,7 @@ class VectorRepository:
         self.client: ClientAPI = client
         # TODO: excpetion
         self.collection: Collection = client.get_collection("lecture_reviews")
-        print("loading transformer")
         self.transformer: SentenceTransformer = transformer
-        print("loading transformer complete")
 
     def embed_sentence(self, sentence: str):
         return list(map(float, self.transformer.encode(sentence)))

@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from collections import defaultdict
 
+from sentence_transformers import SentenceTransformer
 from LlamaClient import LlamaClient
 from MongoRepository import MongoRepository
 from VectorRepository import VectorRepository
@@ -24,10 +25,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+sentence_transformer =  SentenceTransformer('jhgan/ko-sroberta-multitask')
 # 환경변수 로딩
 env_vars = load_env_vars()
 repo = MongoRepository(env_vars["host"], env_vars["port"], env_vars["username"], env_vars["pw"])
-vector_repo = VectorRepository(HttpClient(env_vars["host"], 48000))
+vector_repo = VectorRepository(HttpClient(env_vars["host"], 48000), sentence_transformer)
 llama_client = LlamaClient(env_vars["llama_token"], "./config/config.json")
 
 
