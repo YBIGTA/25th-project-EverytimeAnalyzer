@@ -22,7 +22,7 @@ class LlamaClient:
         """
         lecture_name = lecture_info['name'],
         syllabus = syllabus
-        reviews = " ".join(reviews)
+        reviews = " ".join(reviews)[:4000]
         return self.user_prompt_template.format(
             lecture_name=lecture_name,
             syllabus=syllabus,
