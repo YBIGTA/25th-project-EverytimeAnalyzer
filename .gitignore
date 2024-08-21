@@ -32,3 +32,6 @@ sample/
 
 ### logs ###
 output.log
+
+### heavy data ###
+embedding_formatted.json
