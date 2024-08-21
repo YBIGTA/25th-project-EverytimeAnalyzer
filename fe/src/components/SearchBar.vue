@@ -1,38 +1,41 @@
 <script setup>
-import {defineEmits} from 'vue'
+import {defineEmits, defineProps, ref} from 'vue'
 
-// var topic1 = '';
-// var topic2 = '';
-// var topic3 = '';
+const props = defineProps({
+  host: String,
+  path: String,
+})
 
 const emit = defineEmits(['getRecommendLectureCodes']);
 
-function request() {
+const query = ref('')
+
+async function request() {
+  console.log(props.host + props.path + "/?query=" + query.value)
   // fetch
+      const lectureCodeList = await fetch(props.host + props.path + "/?query=" + query.value)
+          .then(response => response.json())
   // emit data
   emit('getRecommendLectureCodes',
-      ['MST2220-02-00',
-        'UCB1105-01-00',
-        'SOC1002-02-00',
-        'UCG1125-01-00',
-      ]
+      lectureCodeList
   )
 }
+
 
 </script>
 
 <template>
   <div id="form-container">
-    <div v-for="idx in 3" :key="idx">
+    <div v-for="idx in 1" :key="idx">
       <div class="input-container">
         <label :v-for="'topic'+idx+'-form'">topic{{ idx }}</label>
-        <input type="text" :id="'topic'+idx+'-form'">
+        <input type="text" :id="'topic'+idx+'-form'" v-model="query">
       </div>
     </div>
     <button id="input-submit" @click="request"> submit</button>
   </div>
 
-<!--  </div>-->
+  <!--  </div>-->
 </template>
 
 <style scoped>
@@ -40,6 +43,7 @@ function request() {
   width: 50%;
   border: 1px solid aqua;
 }
+
 #input-submit {
   border-radius: 12px;
   width: 100px;
@@ -52,6 +56,7 @@ function request() {
   top: 10px;
 
 }
+
 .input-container {
   height: 50px;
   width: 700px;
@@ -70,6 +75,7 @@ input {
   color: #eee;
   font-size: 18px;
 }
+
 label {
   color: #65657b;
   font-size: 20px;

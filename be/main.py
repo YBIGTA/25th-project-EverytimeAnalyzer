@@ -56,7 +56,7 @@ def get_recommend_lecture(query: str):
         lecture_code_count[code] += 1
 
     result = sorted(lecture_code_count.items(), key=lambda item: item[1], reverse=True)[:5]
-    result = list(map(lambda x: x[0]), result)
+    result = list(map(lambda x: x[0], result))
     return result
 
 

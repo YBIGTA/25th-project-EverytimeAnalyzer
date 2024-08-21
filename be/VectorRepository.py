@@ -23,7 +23,7 @@ class VectorRepository:
 
     def find_top_similar_lecture(self, query: str, topic: str) -> QueryResult:
         result: QueryResult = self.collection.query(
-            query_embeddings=self.calculate_similarity(query),
+            query_embeddings=self.embed_sentence(query),
             where={"topic": topic},
             n_results=50
         )
