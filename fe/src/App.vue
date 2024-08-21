@@ -3,16 +3,19 @@ import {reactive, ref} from 'vue'
 import LectureTable from "@/components/LectureTable.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import ReviewList from "@/components/ReivewList.vue";
-import LLMSummary from "@/components/LLMSummary.vue";
+// import LLMSummary from "@/components/LLMSummary.vue";
 
 const host = "http://localhost:8000"
 // const sampleLectureCode = "UCE1105-01-00"
 
 const lectureCodes = reactive({codes: []})
 const reviewIdx = ref(-1)
+const query = ref("")
 
-function getRecommendLectureCodes(codes) {
+function getRecommendLectureCodes(codes, qquery) {
   lectureCodes.codes = codes
+  query.value =  qquery
+  console.log("query: ", query.value)
 }
 </script>
 
@@ -23,18 +26,20 @@ function getRecommendLectureCodes(codes) {
           :host="host"
           path="/model"
           @getRecommendLectureCodes="getRecommendLectureCodes"/>
-      <div v-if="0 <= reviewIdx">
-        <LLMSummary
-            :lectureCode="lectureCodes.codes[reviewIdx]"
-            :key="reviewIdx"
-        />
-      </div>
+<!--      <div v-if="0 <= reviewIdx">-->
+<!--        <LLMSummary-->
+<!--            :lectureCode="lectureCodes.codes[reviewIdx]"-->
+<!--            :key="reviewIdx"-->
+<!--        />-->
+<!--      </div>-->
     </article>
     <article :key="lectureCodes.codes">
       <div class="lecture-table">
         <div v-for="(lectureCode, idx) in lectureCodes.codes" :key="idx">
           <LectureTable :host="host"
                         :path="'/lecture/'+lectureCode"
+                        :lectureCode="lectureCode"
+                        :query="query"
                         @click="reviewIdx=idx"
           />
         </div>

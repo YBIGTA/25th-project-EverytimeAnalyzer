@@ -10,18 +10,19 @@ const emit = defineEmits(['getRecommendLectureCodes']);
 
 const query = ref('')
 
+
+//TODO: exception control
 async function request() {
-  console.log(props.host + props.path + "/?query=" + query.value)
-  // fetch
-      const lectureCodeList = await fetch(props.host + props.path + "/?query=" + query.value)
-          .then(response => response.json())
-  // emit data
-  emit('getRecommendLectureCodes',
-      lectureCodeList
-  )
+      console.log("query in component: ", query.value)
+      let lectureCodeList = await fetch(props.host + props.path + "/?query=" + query.value)
+            .then(response => response.json())
+
+    lectureCodeList.value = lectureCodeList.sort((a, b) => b[1] - a[1])
+    emit('getRecommendLectureCodes',
+        lectureCodeList.map(item => item[0]),
+        query.value
+    )
 }
-
-
 </script>
 
 <template>
