@@ -17,8 +17,14 @@ function getRecommendLectureCodes(codes) {
 
 <template>
   <div class="container">
-    <SearchBar @getRecommendLectureCodes="getRecommendLectureCodes"/>
     <article>
+      <SearchBar
+          :host="host"
+          path="/model"
+          @getRecommendLectureCodes="getRecommendLectureCodes"/>
+
+    </article>
+    <article :key="lectureCodes.codes">
       <div class="lecture-table">
         <div v-for="(lectureCode, idx) in lectureCodes.codes" :key="idx">
           <LectureTable :host="host"
