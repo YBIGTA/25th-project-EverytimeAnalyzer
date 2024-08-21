@@ -10,5 +10,6 @@ repo = MongoRepository(env_vars["host"], env_vars["port"], env_vars["username"],
 lecture = repo.find_lecture_info("UCE1105-01-00")
 reviews = repo.find_reviews("UCE1105-01-00")
 syllabus = repo.find_syllabus("UCE1105-01-00")
+repo.get_all_lecture_codes()
 
 print()
