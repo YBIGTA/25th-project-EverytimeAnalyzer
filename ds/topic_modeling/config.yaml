@@ -1,0 +1,9 @@
+---
+dataset:
+  max_seq_len: 64
+output_filename:
+  prediction: prediction.csv
+  validation_prediction: validation_prediction.csv
+trainer:
+  fp16: false  # default: false
+...
