@@ -2,6 +2,7 @@ from collections import defaultdict
 
 from chromadb import ClientAPI, Collection, QueryResult, GetResult
 from sentence_transformers import SentenceTransformer
+import numpy as np
 
 import utils
 
@@ -23,15 +24,16 @@ class VectorRepository:
     #     )
     #     return sum(result["distances"][0])
 
-    def get_reviews(self, lecture_code: str, query: str):
-        topics = ["학점", "교수님 강의스타일 및 강의력", "수업 내용", "로드", "시험 출제 스타일"]
-        results = dict()
-        for topic in topics:
-            result: QueryResult = self.collection.query(
-                query_embeddings=self.embed_sentence(query),
-                where={"code": lecture_code, "topic": topic},
-                n_results=15
-            )
+    # def get_reviews(self, lecture_code: str, query: str):
+    #     topics = ["학점", "교수님 강의스타일 및 강의력", "수업 내용", "로드", "시험 출제 스타일"]
+    #     results = dict()
+    #     for topic in topics:
+    #         result: QueryResult = self.collection.query(
+    #             query_embeddings=self.embed_sentence(query),
+    #             # where={"code": lecture_code, "topic": topic},
+    #             where={"$and": [{"code": lecture_code}, {"topic": topic}]},
+    #             n_results=15
+    #         )
 
     def find_top_similar_lecture(self, query: str, topic: str) -> QueryResult:
         result: QueryResult = self.collection.query(
@@ -41,7 +43,8 @@ class VectorRepository:
         )
         return result
 
-    # topic 별로 분리된 embedded reviews vectordb에서 가져오기
+        # topic 별로 분리된 embedded reviews vectordb에서 가져오기
+
     def get_embedded_review(self, lecture_code: str) -> dict:
         reviews_get_result: GetResult = self.collection.get(
             where={"code": lecture_code},
@@ -57,25 +60,35 @@ class VectorRepository:
 
         return topic_reviews_dict
 
-    def get_reviews_distance_matrix(self, lecture_code: str, queries: list[str])-> dict:
+    def get_reviews_distance_matrix(self, lecture_code: str, queries: list[str]) -> dict:
         embedded_queries = list(map(lambda x: self.embed_sentence(x), queries))
         results: QueryResult = self.collection.query(
             query_embeddings=embedded_queries,
             where={"code": lecture_code},
             n_results=100
         )
-        distance_matrix: list[list[float]] =  results["distances"]
+        distance_matrix: list[list[float]] = results["distances"]
         distance_avg_map = {}
         for idx in range(len(queries)):
             if len(distance_matrix[idx]) != 0:
-                distance_avg_map[queries[idx]]  = sum(distance_matrix[idx]) / len(distance_matrix[idx])
+                distance_avg_map[queries[idx]] = sum(distance_matrix[idx]) / len(distance_matrix[idx])
             else:
                 distance_avg_map[queries[idx]] = None
 
         return distance_avg_map
         # distance를 반환 로직 변경될 수 있다.
-        print()
 
+    def get_reviews_classified(self, lecture_code: str, queries: list[str], topic: str) -> list:
+        embedded_queries = list(map(lambda x: self.embed_sentence(x), queries))
+
+        # TODO: query를 topic별로 분류해서 그에 맞는 topic들에 대해서만 쿼리
+        results: GetResult = self.collection.get(
+            # query_embeddings=embedded_queries,
+            where={"$and": [{"code": lecture_code}, {"topic": topic}]},
+            limit=5
+        )
+
+        return results["documents"]
 
 
     def get_reviews_by_query(self, query: str, topic_idx: int, n: int):

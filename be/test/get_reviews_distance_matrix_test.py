@@ -8,4 +8,4 @@ env_vars = load_env_vars()
 sentence_transformer = SentenceTransformer('jhgan/ko-sroberta-multitask')
 vector_repo = VectorRepository(HttpClient(env_vars["host"], 48000), sentence_transformer)
 
-print(vector_repo.get_reviews_distance_matrix("YCI1705-01-00", ["학점을 잘주는 강의", "재미있는 강의", "빡센 강의"]))
+print(vector_repo.get_reviews_classified("YCI1705-01-00", ["학점을 잘주는 강의", "재미있는 강의", "빡센 강의"], "학점"))
