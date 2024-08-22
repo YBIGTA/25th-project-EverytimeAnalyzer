@@ -32,6 +32,8 @@ sample/
 
 ### logs ###
 output.log
+wandb/
 
 ### heavy data ###
 embedding_formatted.json
+checkpoint*/
