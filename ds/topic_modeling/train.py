@@ -23,13 +23,12 @@ from util import compute_metrics, load_config
 def main():
     # Load config
     parser = argparse.ArgumentParser()
-    parser.add_argument('config_file', type=str, default='config.yaml',
-                        nargs='?', help='The path to the config file')
+    parser.add_argument('config_file', type=str, default='config.yaml', nargs='?', help='The path to the config file')
     args = parser.parse_args()
     config = load_config(args.config_file)
 
     # Set Hyperparameters
-    SEED = 456
+    SEED = 1234
     random.seed(SEED)
     np.random.seed(SEED)
     torch.manual_seed(SEED)
@@ -39,10 +38,11 @@ def main():
     DEVICE = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     print(DEVICE)
 
-    BASE_DIR = "/Users/jieunpark/Desktop/25th-project-EverytimeAnalyzer/ds/tc_model/src/"
-    DATA_DIR = os.path.join(BASE_DIR, 'data')
-    OUTPUT_DIR = os.path.join(BASE_DIR, 'output')
-    PREDICTION_DIR = os.path.join(BASE_DIR, 'prediction')
+    current_file_path = os.path.abspath(__file__)
+    BASE_DIR = os.path.dirname(current_file_path)
+    DATA_DIR = os.path.join(BASE_DIR, 'src/data')
+    OUTPUT_DIR = os.path.join(BASE_DIR, 'src/output')
+    PREDICTION_DIR = os.path.join(BASE_DIR, 'src/prediction')
 
     # Load tokenizer and model
     model_name = 'monologg/kobert'
@@ -51,13 +51,10 @@ def main():
 
     # Load data
     data = pd.read_csv(os.path.join(DATA_DIR, 'dataset.csv'))
-    dataset_train, dataset_temp = train_test_split(data, test_size=0.3, random_state=SEED)
-    dataset_valid, dataset_test = train_test_split(dataset_temp, test_size=0.5, random_state=SEED)
+    dataset_train, dataset_valid = train_test_split(data, test_size=0.2, random_state=SEED)
 
     dataset_train = dataset_train.rename(columns={'review': 'text', 'y': 'target'})
     dataset_valid = dataset_valid.rename(columns={'review': 'text', 'y': 'target'})
-    dataset_test = dataset_test.rename(columns={'review': 'text', 'y': 'target'})
-
 
     # Define dataset
     data_train = BERTDataset(dataset_train, tokenizer, config.dataset.max_seq_len)
@@ -87,7 +84,7 @@ def main():
         lr_scheduler_type='linear',
         per_device_train_batch_size=32,
         per_device_eval_batch_size=32,
-        num_train_epochs=2,
+        num_train_epochs=3,
         load_best_model_at_end=True,
         metric_for_best_model='eval_f1',
         greater_is_better=True,
@@ -112,7 +109,10 @@ def main():
     model.eval()
     preds = []
     for _, sample in tqdm(dataset_test.iterrows(), total=len(dataset_test)):
-        inputs = tokenizer(sample['text'], return_tensors='pt').to(DEVICE)
+        text = sample['text']
+        if not isinstance(text, str):
+            text = str(text)
+        inputs = tokenizer(text, return_tensors='pt').to(DEVICE)
         with torch.no_grad():
             logits = model(**inputs).logits
             pred = torch.argmax(torch.nn.Softmax(dim=1)(logits), dim=1).cpu().numpy()
@@ -127,7 +127,10 @@ def main():
     # Validation set post-analysis
     dev_preds = []
     for _, sample in tqdm(dataset_valid.iterrows(), total=len(dataset_valid)):
-        inputs = tokenizer(sample['text'], return_tensors='pt').to(DEVICE)
+        text = sample['text']
+        if not isinstance(text, str):
+            text = str(text)
+        inputs = tokenizer(text, return_tensors='pt').to(DEVICE)
         with torch.no_grad():
             logits = model(**inputs).logits
             pred = torch.argmax(torch.nn.Softmax(dim=1)(logits), dim=1).cpu().numpy()
