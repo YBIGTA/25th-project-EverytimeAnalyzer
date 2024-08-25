@@ -13,7 +13,9 @@ from tqdm import tqdm
 
 # import file
 def importData() -> list[str]:
-    with open('./data/sample.json', 'r', encoding='utf-8') as f:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(current_dir, '..', 'data', 'raw.json')
+    with open(file_path, 'r', encoding='utf-8') as f:
         js = json.loads(f.read())
     df = pd.DataFrame(js)
     df_sim = pd.DataFrame({
