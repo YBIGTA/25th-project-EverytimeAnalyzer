@@ -13,7 +13,6 @@ class LlamaClient:
         self.hyperparameters = config["hyperparameters"]
         self.system_prompt = config["system_prompt"]
         self.user_prompt_template = config["user_prompt_template"]
-
         self.llama = LlamaAPI(api_tokens)
 
     def build_user_prompt(self, reviews: list[str], syllabus: str, lecture_info: dict) -> str:
@@ -23,7 +22,7 @@ class LlamaClient:
         lecture_name = lecture_info['name'],
         syllabus = syllabus
         reviews = " ".join(reviews)
-        reviews_len = min(len(reviews), 4000)
+        reviews_len = min(len(reviews), 4000)   # 최대 길이 4000자로 제한
         reviews = reviews[:reviews_len]
         return self.user_prompt_template.format(
             lecture_name=lecture_name,

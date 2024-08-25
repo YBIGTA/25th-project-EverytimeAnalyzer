@@ -138,7 +138,7 @@ def main():
 
     VALID_PREDICTION_FILEPATH = os.path.join(PREDICTION_DIR, config.output_filename.validation_prediction)
     dataset_valid['pred'] = dev_preds
-    dataset_valid = dataset_valid[['ID', 'text', 'target', 'pred']]
+    dataset_valid = dataset_valid[['text', 'target', 'pred']]
     dataset_valid.to_csv(VALID_PREDICTION_FILEPATH, index=False)
 
 

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from chromadb import HttpClient, Collection
+from chromadb import HttpClient
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sentence_transformers import SentenceTransformer
@@ -27,6 +27,7 @@ app.add_middleware(
 
 # 환경변수 로딩
 env_vars = load_env_vars()
+
 # embedding 모델
 sentence_transformer = SentenceTransformer('jhgan/ko-sroberta-multitask')
 

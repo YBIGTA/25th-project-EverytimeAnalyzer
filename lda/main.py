@@ -94,8 +94,7 @@ if __name__ == '__main__':
     print('Number of unique tokens: %d' % len(dictionary))
     print('Number of documents: %d' % len(corpus))
 
-    lda_model = LdaMulticore(corpus=corpus, id2word=dictionary, num_topics=5, chunksize=1000, passes=7, alpha=0.1,
-                             eta=0.01)
+    lda_model = LdaMulticore(corpus=corpus, id2word=dictionary, num_topics=5, chunksize=1000, passes=7, alpha=0.1, eta=0.01)
 
     # 시각화 저장
     visualize_save_path: str = './results/result.html'
