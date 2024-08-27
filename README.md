@@ -2,7 +2,7 @@
 (프로젝트 개요)
 
 ### Architecture
-(플로우차트 사진이랑 각 단계별 설명)
+![image](https://github.com/YBIGTA/25th-project-EverytimeAnalyzer/blob/main/docs/flowchart.png)
 
 ### Repository Structure
 ```bash
