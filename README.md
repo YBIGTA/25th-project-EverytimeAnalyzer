@@ -2,9 +2,9 @@
 Everytime Analyzer는 강의에 대한 학생들의 솔직한 평가가 담긴 에브리타임의 '강의평' 데이터와 연세포탈의 강의 개요 데이터를 기반으로, 사용자의 니즈에 부합하는 강의를 추천해주는 서비스입니다.
 
 ### Table of contents
-1. [🛠️ Architecture](##-🛠️-Architecture)
-2. [📂 Repository Structure](##-📂-Repository-Structure)
-3. [👯 Team](##-👯-Team)
+1. 🛠️ Architecture
+2. 📂 Repository Structure
+3. 👯 Team
 
 ## 🛠️ Architecture
 ![image](https://github.com/YBIGTA/25th-project-EverytimeAnalyzer/blob/main/docs/flowchart.png)
@@ -12,7 +12,6 @@ Everytime Analyzer는 강의에 대한 학생들의 솔직한 평가가 담긴 �
 #### 1.1 에브리타임 강의평 데이터
 에브리타임 강의평 데이터에는 로그인을 해야만 접근이 가능하다는 점을 고려하여, EC2에 selenium을 사용할 수 있는 환경을 구축하여 하루 500건 미만의 request를 통해 자동으로 데이터가 수집되도록 하였습니다.
 #### 1.2 연세포탈 강의 개요 데이터
-(내용)
 ### 2. Topic Modeling
 강의평 데이터에 내재되어있을 것으로 기대되는 학생들이 강의를 평가하는 기준을 추출하고자 Latent Dirichlet Allocation (LDA) 알고리즘을 이용하여 강의를 분류하는 5개의 기준 (수업 내용, 로드, 교수님 강의스타일 및 강의력, 시험 출제 스타일, 학점) 을 추출하였습니다. 
 ### 3. Topic Classification
